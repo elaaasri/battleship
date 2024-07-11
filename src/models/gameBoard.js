@@ -15,10 +15,11 @@ class GameBoard {
         this.board[i][j] = { value: 0, missed: null };
       }
     }
+    return this.board;
   }
   // place the ship in the correct coordinates :
   placeShip(row, column) {
-    this.createBoard(); // creates board.
+    // this.createBoard();
     if (this.isWithinBounds(row, column)) {
       const ship = new Ship(); // creates ship instance.
       this.board[row][column] = ship;
@@ -39,6 +40,18 @@ class GameBoard {
       attackedCoordinates.missed = true; // tracks missed attacks.
       return "attack missed the ship!";
     }
+  }
+  // checks if all ships are sunk :
+  isAllShipsSunk() {
+    const allShips = [];
+    for (const i in this.board) {
+      for (const j in this.board[i]) {
+        if (!this.board[i][j].hasOwnProperty("value"))
+          allShips.push(this.board[i][j]);
+      }
+    }
+    const isShipsSunk = allShips.every((ship) => ship.isShipSunk);
+    return isShipsSunk ? true : false;
   }
 }
 export default GameBoard;

@@ -3,7 +3,7 @@ class Ship {
   constructor() {
     this.shipLength = 0;
     this.numberOfHits = 0;
-    this.isShipSunk = null;
+    this.isShipSunk = false;
   }
   // increases numbers of hits :
   hit() {
@@ -17,13 +17,3 @@ class Ship {
   }
 }
 export default Ship;
-
-// place the ship in the correct coordinates :
-// placeShip(row, column) {
-
-//   // const ship = new Ship();
-//   // this.board[row][column] = ship;
-//   this.board[row] = this;
-
-//   return this.board;
-// }

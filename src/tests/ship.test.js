@@ -12,5 +12,3 @@ test("ship sunk", () => {
     expect(ship.isShipSunk).toBeTruthy();
   } else expect(ship.isShipSunk).toBeFalsy();
 });
-
-// Note : REMEMBER you only have to test your object’s public interface. Only methods or properties that are used outside of your ‘ship’ object need unit tests.

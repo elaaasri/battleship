@@ -10,10 +10,18 @@ body {
   justify-content: space-between;
   background: linear-gradient(
     90deg,
-    rgba(9, 48, 0, 1) 0%,
-    rgb(21, 103, 3) 50%,
-    rgba(9, 48, 0, 1) 100%
+    rgb(81, 38, 3) 0%,
+    rgba(187, 94, 19, 1) 50%,
+    rgb(81, 38, 3) 100%
   );
+  font-family: "MyCustomFont", "sans-serif";
+}
+@font-face {
+  font-family: "MyCustomFont";
+  src: url("./fonts/DDayStencilSC-Regular.woff2") format("woff2"),
+    url("./fonts/DDayStencilSC-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 /* header styles */
 header {
@@ -21,18 +29,208 @@ header {
   align-items: center;
   justify-content: center;
   height: 100px;
-  font-family: "Delicious Handrawn";
-  font-family: "Cute Font", cursive;
-  text-shadow: 10px 10px 10px rgb(14, 127, 2);
+  text-shadow: 10px 10px 10px rgb(236, 153, 37);
+  letter-spacing: 0.5rem;
   font-size: 20px;
-  letter-spacing: 1rem;
-  margin-left: 20px;
   font-style: italic;
 }
 /* main styles */
+/* main {
+  height: 100%;
+} */
 main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  align-items: center;
+}
+/* players card style */
+#players-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  font-family: "Cute Font", cursive;
+}
+#vs {
+  font-size: 50px;
+}
+label {
+  font-size: 25px;
+}
+#players-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+}
+#player-one-container,
+#player-two-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 20px;
+  height: 280px;
+  box-shadow: 0px 15px 40px black;
+}
+label,
+input {
+  font-weight: bold;
+}
+input {
+  text-align: center;
+  width: 50%;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-family: "Cute Font", cursive;
+  font-size: 20px;
+  background-color: wheat;
+}
+.fa-solid {
+  font-size: 140px;
+  margin-bottom: 10px;
+}
+/* play and beggin button styles */
+#beggin-button {
+  margin-bottom: 10px;
+}
+#play-button,
+#beggin-button {
+  width: 100px;
+  height: 35px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.4s ease;
+  font-family: "MyCustomFont", "sans-serif";
+  font-size: 20px;
+  background-color: black;
+  color: white;
+}
+#play-button:hover,
+#beggin-button:hover {
+  background-color: white;
+  color: black;
+}
+/* placing ships card styles */
+#place-ships-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 15px 40px black;
+  height: 430px;
+  width: 550px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  gap: 10px;
+}
+#place-ships-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  flex: 1;
+}
+#player-board-header {
+  font-size: 20px;
+}
+#place-ships-header {
+  margin-top: 10px;
+  font-size: 30px;
+}
+#place-ships-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+#player-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 80%;
   height: 100%;
 }
+#player-game-board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  width: 280px;
+  height: 280px;
+  box-shadow: 0px 15px 40px black;
+}
+#player-ship-type-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* width: 280px; */
+  height: 100%;
+  width: 50%;
+  box-shadow: 0px 15px 40px black;
+  border-radius: 5px;
+  padding: 5px;
+}
+.player-ship-type {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+#carrier-ship,
+#battle-ship,
+#cruiser-ship,
+#submarine-ship,
+#destroyer-ship {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  outline: none;
+  transition: transform 0.3s ease;
+  position: absolute;
+  cursor: pointer;
+  width: 170px;
+  height: 40px;
+  margin-top: 20px;
+}
+#carrier-ship:hover,
+#battle-ship:hover,
+#cruiser-ship:hover,
+#submarine-ship:hover,
+#destroyer-ship:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+#carrier-ship {
+  background-image: url("./images/ships/carrier.svg");
+}
+#battle-ship {
+  background-image: url("./images/ships/battleship.svg");
+}
+#cruiser-ship {
+  background-image: url("./images/ships/cruiser.svg");
+}
+#submarine-ship {
+  background-image: url("./images/ships/submarine.svg");
+}
+#destroyer-ship {
+  background-image: url("./images/ships/destroyer.svg");
+}
+.hover-zoom {
+  transition: transform 0.3s ease;
+}
+.hover-zoom.hovered {
+  transform: scale(1.2);
+}
+
+/* footer styles */
 footer {
   border: 1px solid black;
   height: 50px;
@@ -47,7 +245,7 @@ footer {
   border: 1px solid black;
   gap: 20px;
 }
-#player-board-container,
+/* #player-board-container,
 #computer-board-container {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -55,9 +253,37 @@ footer {
   width: 400px;
   height: 400px;
   box-shadow: 0px 15px 40px black;
+} */
+/* .square { */
+/* margin: 0; */
+/* position: relative; */
+/* border: 1px solid black; */
+/* } */
+
+/*  */
+.square {
+  position: relative;
+  border: 1px solid;
 }
-#square {
-  border: 1px solid black;
-  border-radius: 5px;
+
+/* body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   margin: 0;
 }
+
+.container {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background-color: lightblue;
+  border: 1px solid red;
+}
+
+#image {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+} */

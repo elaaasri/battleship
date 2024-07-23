@@ -1,7 +1,8 @@
 // ship class :
 class Ship {
-  constructor() {
-    this.shipLength = 0;
+  constructor(shipName, shipLength) {
+    this.shipName = shipName;
+    this.shipLength = shipLength;
     this.numberOfHits = 0;
     this.isShipSunk = false;
   }

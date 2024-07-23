@@ -1,6 +1,8 @@
 import "./style.css";
 import "./models/dom";
 
+// document.body.appendChild(imgElement);
+
 // const firstShip = new Ship();
 // console.log(firstShip);
 // console.log(firstShip.shipLength);
@@ -16,7 +18,7 @@ import "./models/dom";
   N | Class of ship |	Size
   1 |	Carrier	     |   5
   2 |	Battleship	 |   4
-  3 |	Destroyer	   |   3
+  3 |	Destroyer	   |   3s
   4 |	Submarine	   |   3
   5 |	Patrol Boat  |   2
 

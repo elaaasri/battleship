@@ -6,22 +6,38 @@ class GameBoard {
     this.rows = 10;
     this.columns = 10;
     this.board = [];
+    this.rightBoardCoords = [];
   }
   // creates game board :
   createBoard() {
     for (let i = 0; i < this.rows; i++) {
       this.board[i] = [];
+      this.rightBoardCoords.push([9, i]); // get board right coords.
       for (let j = 0; j < this.columns; j++) {
-        this.board[i][j] = { value: 0, missed: null };
+        this.board[i][j] = { coords: [i, j], missed: null };
       }
     }
     return this.board;
   }
+  setBoardlimit(x, y) {
+    console.log(x, y);
+  }
+  // buildGraph = () => {
+  //   let board = [];
+  //   for (let i = 0; i < 10; i++) {
+  //     board[i] = [];
+  //     for (let j = 0; j < 10; j++) {
+  //       board[i][j] = [i, j];
+  //     }
+  //   }
+  //   return board;
+  // };
   // place the ship in the correct coordinates :
-  placeShip(row, column) {
+  placeShip(row, column, shipType, shipLength) {
     // this.createBoard();
     if (this.isWithinBounds(row, column)) {
-      const ship = new Ship(); // creates ship instance.
+      const ship = new Ship(shipType, shipLength); // creates ship instance.
+      // console.log(this.board);
       this.board[row][column] = ship;
       return "ship placed!";
     } else return "out of bound coordinates!";

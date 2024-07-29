@@ -1,6 +1,6 @@
-import Player from "./player";
-import GameBoard from "./gameBoard";
-import Ship from "./ship";
+// import Player from "./player";
+// import GameBoard from "./gameBoard";
+// import Ship from "./ship";
 
 // dom :
 const playButton = document.getElementById("play-button");
@@ -37,6 +37,148 @@ const createPlayerGameBoardElements = (arr, container) => {
   }
 };
 createPlayerGameBoardElements(humanPlayer.boardArr, playerBoardContainer);
+// ship type objs :
+const typeOfShips = () => {
+  const carrierShip = new Ship("Carrier", 5);
+  const battleShip = new Ship("Battleship", 4);
+  const destroyerShip = new Ship("Destroyer", 3);
+  const submarineShip = new Ship("Submarine", 3);
+  const patrolBoatShip = new Ship("Patrol Boat", 2);
+
+  console.log(carrierShip);
+  console.log(battleShip);
+  console.log(destroyerShip);
+  console.log(submarineShip);
+  console.log(patrolBoatShip);
+
+  return {
+    carrierShip,
+    battleShip,
+    destroyerShip,
+    submarineShip,
+    patrolBoatShip,
+  };
+};
+// // get selected ship element :
+// const allShipTypes = document.querySelectorAll(".player-ship-type");
+// let selectedShipType = null;
+// const getSelectedShipType = () => {
+//   [...allShipTypes].map((ship) =>
+//     ship.addEventListener("click", function () {
+//       console.log(ship.textContent);
+//       selectedShipType = ship.textContent;
+//     })
+//   );
+//   console.log(selectedShipType);
+
+//   return selectedShipType;
+// };
+// getSelectedShipType();
+const allShipTypes = document.querySelectorAll(".player-ship-type");
+let selectedShipType = null;
+
+// const getSelectedShipType = () => {
+//   [...allShipTypes].forEach((ship) => {
+//     ship.addEventListener("click", function () {
+//       selectedShipType = ship.textContent;
+//       console.log(selectedShipType); // Log the selected ship type when a ship is clicked
+//     });
+//   });
+//   return selectedShipType;
+// };
+
+// const playerBoardUI = {
+//   getSelectedShipType() {
+//     let selectedShipType = null;
+//     [...allShipTypes].map((ship) => {
+//       ship.addEventListener("click", function () {
+//         selectedShipType = ship.textContent;
+//         console.log(selectedShipType); // Log the selected ship type when a ship is clicked
+//       });
+//     });
+//     return selectedShipType;
+//   },
+//   test() {
+//     console.log(this.getSelectedShipType());
+//   },
+// };
+// playerBoardUI.getSelectedShipType();
+
+// Call the function to set up the event listeners
+
+// move player ship elements :
+const movePlayerShipELements = () => {
+  // const getClickedShip = () => {
+  //   const allShipTypes = document.querySelectorAll(".player-ship-type");
+  //   [...allShipTypes].map((ship) =>
+  //     ship.addEventListener("click", function () {
+  //       return ship;
+  //     })
+  //   );
+  // };
+  const selectedShip = getSelectedShipType();
+  // console.log(selectedShip);
+  //
+  // console.log(clickedShip);
+  // const carrierShip = document.getElementById("carrier-ship");
+  // const followMouse = (event) => {
+  //   // console.log(event);
+  //   var x = event.clientX;
+  //   var y = event.clientY - carrierShip.height;
+  //   carrierShip.style.left = `${x}px`;
+  //   carrierShip.style.top = `${y}px`;
+  // };
+  // const getBoardLimitCoords = (event) => {
+  //   const rightLimitCoords = [
+  //     event.target.getAttribute("data-x"),
+  //     event.target.getAttribute("data-y"),
+  //   ];
+  //   // const [x, y] = rightLimitCoords;
+  //   // humanPlayer.setplayerBoard(x, y);
+  //   // console.log(rightLimitCoords);
+  // };
+  // // get correct ship size :
+  // const getCorrectShipSize = (ship) => {
+  //   ship.style.pointerEvents = "none";
+  //   ship.style.width = `${squareLenght.offsetWidth * 5}px`;
+  //   ship.style.height = `${squareLenght.clientHeight}px`;
+  //   ship.style.cursor = "pointer";
+  // };
+  // // place ship on board :
+  // const placeShipOnBoard = (ship) => {
+  //   [...playerBoardContainer.children].map((square) => {
+  //     square.addEventListener("click", function () {
+  //       console.log(square.textContent);
+  //       square.appendChild(ship);
+  //       ship.style.position = "absolute";
+  //       ship.style.top = "-75%";
+  //       ship.style.left = "0%";
+  //       ship.style.pointerEvents = "none";
+  //       const rightLimitCoords = [
+  //         square.getAttribute("data-x"),
+  //         square.getAttribute("data-y"),
+  //       ];
+  //       const [x, y] = rightLimitCoords;
+  //       document.removeEventListener("mousemove", followMouse);
+  //       getCurrentSquareCoords(x, y);
+  //     });
+  //   });
+  // };
+  // const getCurrentSquareCoords = (x, y) => {
+  //   console.log(x, y);
+  //   getUnplaceableBoardCoord(x, y);
+  // };
+  // // carrier ship click event :
+  // carrierShip.addEventListener("click", () => {
+  //   getCorrectShipSize(carrierShip); // get ship size.
+  //   document.addEventListener("mousemove", (event) => {
+  //     followMouse(event); // follow mouse event.
+  //     // getBoardLimitCoords(event);
+  //   });
+  //   // placeShipOnBaord(carrierShip); // place ship on boar.
+  // });
+};
+
 // get correct ship type coordinates :
 const getCorrectShipTypeCoords = (square, shipType) => {
   console.log(square, shipType);
@@ -60,76 +202,8 @@ const getCorrectShipTypeCoords = (square, shipType) => {
   });
   console.log(humanPlayer.boardArr);
 };
+
 const squareLenght = document.querySelector(".square");
-
-const movePlayerShipELements = () => {
-  const carrierShip = document.getElementById("carrier-ship");
-  const followMouse = (event) => {
-    // console.log(event);
-    var x = event.clientX;
-    var y = event.clientY - carrierShip.height;
-    carrierShip.style.left = `${x}px`;
-    carrierShip.style.top = `${y}px`;
-  };
-
-  const getBoardLimitCoords = (event) => {
-    const rightLimitCoords = [
-      event.target.getAttribute("data-x"),
-      event.target.getAttribute("data-y"),
-    ];
-    // const [x, y] = rightLimitCoords;
-    // humanPlayer.setplayerBoard(x, y);
-    // console.log(rightLimitCoords);
-  };
-
-  // get correct ship size :
-  const getCorrectShipSize = (ship) => {
-    ship.style.pointerEvents = "none";
-    ship.style.width = `${squareLenght.offsetWidth * 5}px`;
-    ship.style.height = `${squareLenght.clientHeight}px`;
-    ship.style.cursor = "pointer";
-  };
-
-  // place ship on board :
-  const placeShipOnBoard = (ship) => {
-    [...playerBoardContainer.children].map((square) => {
-      square.addEventListener("click", function () {
-        console.log(square.textContent);
-        square.appendChild(ship);
-        ship.style.position = "absolute";
-        ship.style.top = "-75%";
-        ship.style.left = "0%";
-        ship.style.pointerEvents = "none";
-
-        const rightLimitCoords = [
-          square.getAttribute("data-x"),
-          square.getAttribute("data-y"),
-        ];
-
-        const [x, y] = rightLimitCoords;
-
-        document.removeEventListener("mousemove", followMouse);
-        getCurrentSquareCoords(x, y);
-      });
-    });
-  };
-
-  const getCurrentSquareCoords = (x, y) => {
-    console.log(x, y);
-    getUnplaceableBoardCoord(x, y);
-  };
-
-  // carrier ship click event :
-  carrierShip.addEventListener("click", () => {
-    getCorrectShipSize(carrierShip); // get ship size.
-    document.addEventListener("mousemove", (event) => {
-      followMouse(event); // follow mouse event.
-      // getBoardLimitCoords(event);
-    });
-    placeShipOnBaord(carrierShip); // place ship on boar.
-  });
-};
-movePlayerShipELements();
 
 // playerBoardContainer.addEventListener("mousemove", function (event) {
 //   const rect = playerBoardContainer.getBoundingClientRect();
@@ -142,7 +216,7 @@ movePlayerShipELements();
 // });
 
 // [...playerBoardContainer.children].map((square) => {
-//   square.addEventListener("click", () => {
+//   square.addEventListener("click", () => {pon
 //     console.log(image.width);
 //     console.log(image.height);
 
@@ -157,26 +231,26 @@ movePlayerShipELements();
 
 // });
 
-const getPlayerShipTypeEvent = () => {
-  const allPlayerShipsTypes = document.querySelectorAll(".player-ship");
-  const playerGameBoardSquares = playerBoardContainer.children;
-  [...allPlayerShipsTypes].map((ship) =>
-    ship.addEventListener(
-      "click",
-      function () {
-        console.log(this);
-        // this.style.display = "none";
-        const playeShipType = ship.id;
-        [...playerGameBoardSquares].map((square) => {
-          square.addEventListener("click", () =>
-            getCorrectShipTypeCoords(square, playeShipType)
-          );
-        });
-      }
-      // { once: true }
-    )
-  );
-};
+// const getPlayerShipTypeEvent = () => {
+//   const allPlayerShipsTypes = document.querySelectorAll(".player-ship");
+//   const playerGameBoardSquares = playerBoardContainer.children;
+//   [...allPlayerShipsTypes].map((ship) =>
+//     ship.addEventListener(
+//       "click",
+//       function () {
+//         console.log(this);
+//         // this.style.display = "none";
+//         const playeShipType = ship.id;
+//         [...playerGameBoardSquares].map((square) => {
+//           square.addEventListener("click", () =>
+//             getCorrectShipTypeCoords(square, playeShipType)
+//           );
+//         });
+//       }
+//       // { once: true }
+//     )
+//   );
+// };
 
 // getPlayerShipTypeEvent();
 
@@ -238,28 +312,6 @@ const getPlayerShipTypeEvent = () => {
 //   3 |	Tempest Raider	   |   3
 //   4 |	Shadow Shark	   |   3
 //   5 |	Swift Cutlass  |   2
-
-const typeOfShips = () => {
-  const carrierShip = new Ship("Carrier", 5);
-  const battleShip = new Ship("Battleship", 4);
-  const destroyerShip = new Ship("Destroyer", 3);
-  const submarineShip = new Ship("Submarine", 3);
-  const patrolBoatShip = new Ship("Patrol Boat", 2);
-
-  console.log(carrierShip);
-  console.log(battleShip);
-  console.log(destroyerShip);
-  console.log(submarineShip);
-  console.log(patrolBoatShip);
-
-  return {
-    carrierShip,
-    battleShip,
-    destroyerShip,
-    submarineShip,
-    patrolBoatShip,
-  };
-};
 
 // createBoardElements(computerPlayer.boardArr, computerBoardContainer); // creates computer board.
 // placing ships :

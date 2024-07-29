@@ -229,7 +229,6 @@ input {
 .hover-zoom.hovered {
   transform: scale(1.2);
 }
-
 /* footer styles */
 footer {
   border: 1px solid black;

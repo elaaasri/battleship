@@ -1,5 +1,5 @@
 import "./style.css";
-import "./models/dom";
+import "./models/ui";
 
 // document.body.appendChild(imgElement);
 

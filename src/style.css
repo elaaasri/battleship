@@ -199,6 +199,7 @@ input {
   width: 170px;
   height: 40px;
   margin-top: 20px;
+  pointer-events: "none";
 }
 #carrier-ship:hover,
 #battle-ship:hover,
@@ -208,6 +209,7 @@ input {
   transform: scale(1.1);
   cursor: pointer;
 }
+
 #carrier-ship {
   background-image: url("./images/ships/carrier.svg");
 }

@@ -16,5 +16,13 @@ class Ship {
       return (this.isShipSunk = true);
     } else return (this.isShipSunk = false);
   }
+  // get ship Name :
+  getShipName() {
+    return this.shipName;
+  }
+  // get ship Length :
+  getShipLength() {
+    return this.shipLength;
+  }
 }
 export default Ship;

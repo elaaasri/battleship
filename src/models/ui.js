@@ -8,8 +8,8 @@ const allPlayerShipImages = [
   ...document.querySelectorAll(".player-ship-image"),
 ];
 // assign new players :
-const humanPlayer = new Player("human");
-const computerPlayer = new Player("computer");
+const humanPlayer = new Player("human"); // player obj.
+const computerPlayer = new Player("computer"); // computer obj.
 // create player game board elements :
 const createPlayerGameBoardElements = (arr, container) => {
   for (const row of arr) {
@@ -27,6 +27,7 @@ const createPlayerGameBoardElements = (arr, container) => {
 createPlayerGameBoardElements(humanPlayer.boardArr, playerBoardContainer);
 // setup player ship types dom obj :
 const dislayPlayerShipTypes = {
+  // allPreviousPlaceShipsCoords: [],
   // display ship type elements :
   render(shipImage) {
     const shipObj = humanPlayer.createShipType(shipImage.id);
@@ -37,29 +38,61 @@ const dislayPlayerShipTypes = {
     this.makeOtherShipsUnclickable(shipImage);
     this.handleClickedPlayerSquareEvent(shipImage, handleMouseEvent, shipObj);
   },
+  // validate ship coords :
+  validateShipCoords(correctCoords) {
+    return correctCoords.every((coord) =>
+      humanPlayer.gameBoard.isWithinBounds(coord[0], coord[1])
+    );
+  },
+  // handle clicked square event :
   handleClickedPlayerSquareEvent(currShipImage, handleMouse, curreShipObj) {
     const playerSquares = [...playerBoardContainer.children];
+    const shipName = curreShipObj.getShipName();
+    const shipLength = curreShipObj.getShipLength();
     let shipGotPlaced = false;
+    // player square event :
     playerSquares.map((square) =>
       square.addEventListener("click", () => {
         if (!shipGotPlaced) {
-          const squareCoords = this.getSquareCoords(square);
-          this.placeShipOnBoard(square, currShipImage);
-          document.removeEventListener("mousemove", handleMouse);
-          humanPlayer.setPlayerShipPosition(squareCoords, curreShipObj);
-          this.makeOtherShipsClickable();
-          shipGotPlaced = true;
+          const correctCoords = this.getCorrectCoords(square, shipLength);
+          const isCoordsWithingTheBoard =
+            this.validateShipCoords(correctCoords);
+
+          if (!isCoordsWithingTheBoard) return;
+          else {
+            document.removeEventListener("mousemove", handleMouse);
+            humanPlayer.setPlayerShipPosition(
+              correctCoords,
+              shipName,
+              shipLength
+            );
+            this.placeShipOnBoard(square, currShipImage);
+            this.makeOtherShipsClickable();
+            shipGotPlaced = true;
+          }
         }
       })
     );
   },
   // get square coords :
-  getSquareCoords(square) {
+  getCorrectCoords(square, shipLength) {
     const squareCoords = [
       Number(square.getAttribute("data-x")),
       Number(square.getAttribute("data-y")),
     ];
-    return squareCoords;
+    const [x, y] = squareCoords;
+    const allRightCoords = [
+      [x, y],
+      [x, y + 1],
+      [x, y + 2],
+      [x, y + 3],
+      [x, y + 4],
+    ];
+    const correctCoords = allRightCoords.slice(0, shipLength);
+    correctCoords.every((coord) =>
+      humanPlayer.gameBoard.isWithinBounds(coord[0], coord[1])
+    );
+    return correctCoords;
   },
   // place ship element on board :
   placeShipOnBoard(currentSquare, ship) {
@@ -104,3 +137,38 @@ allPlayerShipImages.map((ship) => {
     dislayPlayerShipTypes.render(ship);
   });
 });
+
+////////////////////////////////////////////////////////////////////////////////////
+// working on setting limits of ships on player board !
+
+// const correctCoords = this.getCorrectCoords(square, shipLength);
+
+// if (shipGotPlaced) return;
+// else {
+//   // if (correctCoords == null) return;
+//   // else {
+//   console.log(correctCoords);
+//   document.removeEventListener("mousemove", handleMouse);
+//   humanPlayer.setPlayerShipPosition(
+//     correctCoords,
+//     shipName,
+//     shipLength
+//   );
+//   this.placeShipOnBoard(square, currShipImage);
+//   this.makeOtherShipsClickable();
+//   // }
+// }
+
+// // const isCoordsWithingTheBoard = this.setShipTypeLimits(correctCoords);
+
+// // console.log(correctCoords);
+// // console.log(isCoordsWithingTheBoard);
+
+// // if (!shipGotPlaced) {
+// humanPlayer.setPlayerShipPosition(correctCoords, shipName, shipLength);
+// this.placeShipOnBoard(square, currShipImage);
+// this.makeOtherShipsClickable();
+// // this.allPreviousPlaceShipsCoords.push(correctCoords);
+// // this.validateShipCoordinates(this.allPreviousPlaceShipsCoords);
+// shipGotPlaced = true;
+// // }

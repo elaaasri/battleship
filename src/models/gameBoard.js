@@ -6,7 +6,6 @@ class GameBoard {
     this.rows = 10;
     this.columns = 10;
     this.board = [];
-    // this.rightBoardCoords = [];
   }
   // creates game board :
   createBoard() {

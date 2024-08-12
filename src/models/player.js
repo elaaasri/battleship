@@ -17,23 +17,25 @@ class Player {
     return this.gameBoard.setBoardlimit(x, y);
   }
   // set player ship position :
-  setPlayerShipPosition(squareCoords, currShip) {
-    const shipName = currShip.getShipName();
-    const shipLength = currShip.getShipLength();
-    const [x, y] = squareCoords;
-    const allRightCoords = [
-      [x, y],
-      [x, y + 1],
-      [x, y + 2],
-      [x, y + 3],
-      [x, y + 4],
-    ];
-    let correctCoords = allRightCoords.slice(0, shipLength);
-    correctCoords.map((coord) => {
-      const [x, y] = coord;
-      this.gameBoard.placeShip(x, y, shipName, shipLength);
-    });
-    console.log(this.boardArr);
+  setPlayerShipPosition(correctCoords, shipName, shipLength) {
+    // const shipName = currShip.getShipName();
+    // const shipLength = currShip.getShipLength();
+    // const [x, y] = squareCoords;
+    // const allRightCoords = [
+    //   [x, y],
+    //   [x, y + 1],
+    //   [x, y + 2],
+    //   [x, y + 3],
+    //   [x, y + 4],
+    // ];
+    // let correctCoords = allRightCoords.slice(0, shipLength);
+    if (correctCoords == null) return;
+    else
+      correctCoords.map((coord) => {
+        const [x, y] = coord;
+        this.gameBoard.placeShip(x, y, shipName, shipLength);
+      });
+    // console.log(this.boardArr);
   }
   createShipType(shipName) {
     switch (shipName) {

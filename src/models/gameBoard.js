@@ -11,26 +11,52 @@ class GameBoard {
   createBoard() {
     for (let i = 0; i < this.rows; i++) {
       this.board[i] = [];
-      // this.rightBoardCoords.push([9, i]); // get board right coords.
       for (let j = 0; j < this.columns; j++) {
         this.board[i][j] = { coords: [i, j], missed: null };
       }
     }
-    // return this.board;
   }
-  // place the ship in the correct coordinates :
+  // place the ship in the correct coords :
   placeShip(row, column, shipType, shipLength) {
-    // this.createBoard();
-    if (this.isWithinBounds(row, column)) {
-      const ship = new Ship(shipType, shipLength); // creates ship instance.
-      // console.log(this.board);
-      this.board[row][column] = ship;
-      return "ship placed!";
-    } else return "out of bound coordinates!";
+    const ship = new Ship(shipType, shipLength); // creates ship instance.
+    this.board[row][column] = ship;
   }
   // checks the given coordinates is within the bounds of the board :
   isWithinBounds(x, y) {
     return x >= 0 && x < this.rows && y >= 0 && y < this.columns;
+  }
+  // get correct ship coords :
+  getCurrValidCoords(currSquare, currShipLength) {
+    // gets curr square coords :
+    const currSquareCoords = [
+      Number(currSquare.getAttribute("data-x")),
+      Number(currSquare.getAttribute("data-y")),
+    ];
+    // gets all right ship coords :
+    const [x, y] = currSquareCoords;
+    const allRightSideCoords = [
+      [x, y],
+      [x, y + 1],
+      [x, y + 2],
+      [x, y + 3],
+      [x, y + 4],
+    ].slice(0, currShipLength);
+    // checks if curr ship type coords are within the board :
+    const isShipCoordsWithingBoard = allRightSideCoords.every((coord) =>
+      this.isWithinBounds(coord[0], coord[1])
+    );
+    return isShipCoordsWithingBoard ? allRightSideCoords : null;
+  }
+  // checks if ship coords are valid :
+  isShiptCoordsValid(validCoords, allPreviousShipCoordsArr) {
+    const areCoordsEqual = allPreviousShipCoordsArr.some((prevCoord) =>
+      prevCoord.some((coord) =>
+        validCoords.some(
+          (currCoord) => JSON.stringify(coord) === JSON.stringify(currCoord)
+        )
+      )
+    );
+    return !areCoordsEqual;
   }
   // checks if the attack hits a ship or not :
   receiveAttack(row, column) {

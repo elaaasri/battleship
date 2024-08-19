@@ -16,11 +16,11 @@ class Ship {
       return (this.isShipSunk = true);
     } else return (this.isShipSunk = false);
   }
-  // get ship Name :
+  // get ship same :
   getShipName() {
     return this.shipName;
   }
-  // get ship Length :
+  // get ship length :
   getShipLength() {
     return this.shipLength;
   }

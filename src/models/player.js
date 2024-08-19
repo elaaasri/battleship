@@ -6,50 +6,30 @@ class Player {
     this.name = name;
     this.gameBoard = new GameBoard();
     this.gameBoard.createBoard();
-    this.boardArr = this.gameBoard.board;
   }
   // get player name :
   getName() {
     return this.name;
   }
-  // set player board limit :
-  setplayerBoard(x, y) {
-    return this.gameBoard.setBoardlimit(x, y);
-  }
   // set player ship position :
   setPlayerShipPosition(correctCoords, shipName, shipLength) {
-    // const shipName = currShip.getShipName();
-    // const shipLength = currShip.getShipLength();
-    // const [x, y] = squareCoords;
-    // const allRightCoords = [
-    //   [x, y],
-    //   [x, y + 1],
-    //   [x, y + 2],
-    //   [x, y + 3],
-    //   [x, y + 4],
-    // ];
-    // let correctCoords = allRightCoords.slice(0, shipLength);
-    if (correctCoords == null) return;
-    else
-      correctCoords.map((coord) => {
-        const [x, y] = coord;
-        this.gameBoard.placeShip(x, y, shipName, shipLength);
-      });
-    // console.log(this.boardArr);
+    correctCoords.map((coord) => {
+      const [x, y] = coord;
+      this.gameBoard.placeShip(x, y, shipName, shipLength);
+    });
+    console.log(this.gameBoard.board);
   }
+  // creates ship type obj :
   createShipType(shipName) {
-    switch (shipName) {
-      case "carrier-ship":
-        return new Ship(shipName, 5);
-      case "battle-ship":
-        return new Ship(shipName, 4);
-      case "cruiser-ship":
-      case "submarine-ship":
-        return new Ship(shipName, 3);
-      case "destroyer-ship":
-        return new Ship(shipName, 2);
-    }
+    const allShipTypes = {
+      "carrier-ship": 5,
+      "battle-ship": 4,
+      "cruiser-ship": 3,
+      "submarine-ship": 3,
+      "destroyer-ship": 2,
+    };
+    const shipLength = allShipTypes[shipName];
+    return new Ship(shipName, shipLength);
   }
 }
-
 export default Player;

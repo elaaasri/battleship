@@ -4,14 +4,16 @@ import Player from "./player";
 
 // dom elements :
 const playerBoardContainer = document.getElementById("player-game-board");
+const computerBoardContainer = document.getElementById("computer-game-board");
 const allPlayerShipImages = [
   ...document.querySelectorAll(".player-ship-image"),
 ];
+
 // assign new players :
 const humanPlayer = new Player("human"); // player obj.
 const humnaPlayerGameBoard = humanPlayer.gameBoard; // player game board.
-// const computerPlayer = new Player("computer"); // computer obj.
-// const computerPlayerGameBoard = computerPlayer.gameBoard; // computer game board.
+const computerPlayer = new Player("computer"); // computer obj.
+const computerPlayerGameBoard = computerPlayer.gameBoard; // computer game board.
 
 // create player game board elements :
 const createPlayerGameBoardElements = (arr, container) => {
@@ -28,6 +30,11 @@ const createPlayerGameBoardElements = (arr, container) => {
   }
 };
 createPlayerGameBoardElements(humnaPlayerGameBoard.board, playerBoardContainer);
+createPlayerGameBoardElements(
+  computerPlayerGameBoard.board,
+  computerBoardContainer
+);
+
 // setup player ship types dom obj :
 const renderPlayerShipTypes = {
   allPreviousShipCoords: [],
@@ -76,7 +83,7 @@ const renderPlayerShipTypes = {
     playerSquares.map((square) =>
       square.addEventListener("click", () => {
         if (!shipGotPlaced) {
-          const currValidCoords = humnaPlayerGameBoard.getCurrValidCoords(
+          const currValidCoords = humnaPlayerGameBoard.getPlayerCurrValidCoords(
             square,
             shipLength
           );
@@ -112,3 +119,82 @@ const renderPlayerShipTypes = {
 allPlayerShipImages.map((ship) => {
   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
 });
+
+const begginButton = document.getElementById("beggin-button");
+// begginButton.addEventListener("click",)
+// const placeShipsCard = document.getElementById("place-ships-card");
+
+const renderComputerShips = {
+  render() {
+    const allComputerShipTypes = this.getComputerShipTypes();
+    this.placeComputerShips(allComputerShipTypes);
+  },
+  // get all computer ship types :
+  getComputerShipTypes() {
+    // clone ship images :
+    const allComputerShipImages = allPlayerShipImages.map((image) =>
+      image.cloneNode(true)
+    );
+    // all computer ship types :
+    const allShipTypesArr = [
+      ["carrier-ship", 5, allComputerShipImages[0]],
+      ["battle-ship", 4, allComputerShipImages[1]],
+      ["cruiser-ship", 3, allComputerShipImages[2]],
+      ["submarine-ship", 3, allComputerShipImages[3]],
+      ["destroyer-ship", 2, allComputerShipImages[4]],
+    ];
+    return allShipTypesArr;
+  },
+  placeComputerShips(computerShipTypes) {
+    computerShipTypes.map(([shipName, shipLength, shipImage]) => {
+      let computerValidCoords = null;
+
+      while (!computerValidCoords) {
+        computerValidCoords =
+          computerPlayerGameBoard.getComputerShipValidCoords(
+            shipName,
+            shipLength
+          );
+      }
+
+      // console.log(computerValidCoords);
+
+      console.log(computerValidCoords);
+
+      this.placeComputerShipsOnBoard(
+        computerValidCoords[0],
+        shipImage,
+        shipLength
+      );
+
+      computerPlayer.setPlayerShipPosition(
+        computerValidCoords,
+        shipName,
+        shipLength
+      );
+    });
+  },
+
+  placeComputerShipsOnBoard(validCoord, shipImage, shipLength) {
+    let copyImages = allPlayerShipImages.cloneNode;
+
+    [...computerBoardContainer.children].map((square) => {
+      let x = +square.getAttribute("data-x");
+      let y = +square.getAttribute("data-y");
+      if (x == validCoord[0] && y == validCoord[1]) {
+        // console.log(square);
+
+        shipImage.style.width = `${square.offsetWidth * shipLength}px`;
+        shipImage.style.height = `${square.offsetHeight}px`;
+
+        shipImage.style.position = "absolute";
+        shipImage.style.top = "-75%";
+        shipImage.style.left = "0%";
+        shipImage.style.pointerEvents = "none";
+        square.appendChild(shipImage);
+      }
+    });
+  },
+};
+
+renderComputerShips.render();

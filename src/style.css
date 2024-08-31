@@ -157,7 +157,8 @@ input {
   width: 80%;
   height: 100%;
 }
-#player-game-board {
+#player-game-board,
+#computer-game-board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);

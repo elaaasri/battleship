@@ -26,7 +26,7 @@ class GameBoard {
     return x >= 0 && x < this.rows && y >= 0 && y < this.columns;
   }
   // get correct ship coords :
-  getCurrValidCoords(currSquare, currShipLength) {
+  getPlayerCurrValidCoords(currSquare, currShipLength) {
     // gets curr square coords :
     const currSquareCoords = [
       Number(currSquare.getAttribute("data-x")),
@@ -57,6 +57,30 @@ class GameBoard {
       )
     );
     return !areCoordsEqual;
+  }
+  //   // get computer correct ship coords :
+  getComputerShipValidCoords(shipName, shipSize) {
+    const allCoords = this.board.map((row) => {
+      return row.map((cell) => {
+        return cell.coords;
+      });
+    });
+    const randomValidIndex = Math.floor(Math.random() * allCoords.length);
+    const randomCoords = allCoords[randomValidIndex][randomValidIndex];
+    if (!randomCoords) return;
+    const [x, y] = randomCoords;
+    const allRightSideCoords = [
+      [x, y],
+      [x, y + 1],
+      [x, y + 2],
+      [x, y + 3],
+      [x, y + 4],
+    ].slice(0, shipSize);
+    // checks if curr ship type coords are within the board :
+    const isShipCoordsWithingBoard = allRightSideCoords.every(([x, y]) =>
+      this.isWithinBounds(x, y)
+    );
+    return isShipCoordsWithingBoard ? allRightSideCoords : null;
   }
   // checks if the attack hits a ship or not :
   receiveAttack(row, column) {

@@ -12,8 +12,7 @@ class Player {
     return this.name;
   }
   // set player ship position :
-  setPlayerShipPosition(correctCoords, shipName, shipLength) {
-    // console.log(correctCoords);
+  setShipPositionOnBoard(correctCoords, shipName, shipLength) {
     correctCoords.map((coord) => {
       const [x, y] = coord;
       this.gameBoard.placeShip(x, y, shipName, shipLength);

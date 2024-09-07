@@ -59,13 +59,14 @@ class GameBoard {
     return !areCoordsEqual;
   }
   //   // get computer correct ship coords :
-  getComputerShipValidCoords(shipName, shipSize) {
+  getComputerShipValidCoords(shipSize) {
     const allCoords = this.board.map((row) => {
       return row.map((cell) => {
         return cell.coords;
       });
     });
     const randomValidIndex = Math.floor(Math.random() * allCoords.length);
+
     const randomCoords = allCoords[randomValidIndex][randomValidIndex];
     if (!randomCoords) return;
     const [x, y] = randomCoords;

@@ -31,7 +31,7 @@ header {
   height: 100px;
   text-shadow: 10px 10px 10px rgb(236, 153, 37);
   letter-spacing: 0.5rem;
-  font-size: 20px;
+  font-size: 30px;
   font-style: italic;
 }
 /* main styles */
@@ -118,7 +118,7 @@ input {
   color: black;
 }
 /* placing ships card styles */
-#place-ships-card {
+#place-player-ships-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -232,13 +232,29 @@ input {
 .hover-zoom.hovered {
   transform: scale(1.2);
 }
+.square {
+  position: relative;
+  border: 1px solid;
+}
+/* player vs computer card styles */
+
+#player-vs-computer-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+}
+#vs {
+  font-size: 40px;
+}
+
 /* footer styles */
 footer {
   border: 1px solid black;
   height: 50px;
 }
 /* boards container styles */
-#boards-container {
+/* #boards-container {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -246,7 +262,8 @@ footer {
   width: 100%;
   border: 1px solid black;
   gap: 20px;
-}
+  background-color: red;
+} */
 /* #player-board-container,
 #computer-board-container {
   display: grid;
@@ -263,10 +280,6 @@ footer {
 /* } */
 
 /*  */
-.square {
-  position: relative;
-  border: 1px solid;
-}
 
 /* body {
   display: flex;

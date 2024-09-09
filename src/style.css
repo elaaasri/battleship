@@ -238,7 +238,7 @@ input {
 }
 /* player vs computer card styles */
 
-#player-vs-computer-card {
+#battle-card {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -247,58 +247,21 @@ input {
 #vs {
   font-size: 40px;
 }
+#player-name,
+#computer-name {
+  font-size: 25px;
+}
+#player-battle-container,
+#computer-battle-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
 
 /* footer styles */
 footer {
   border: 1px solid black;
   height: 50px;
 }
-/* boards container styles */
-/* #boards-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  border: 1px solid black;
-  gap: 20px;
-  background-color: red;
-} */
-/* #player-board-container,
-#computer-board-container {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-  width: 400px;
-  height: 400px;
-  box-shadow: 0px 15px 40px black;
-} */
-/* .square { */
-/* margin: 0; */
-/* position: relative; */
-/* border: 1px solid black; */
-/* } */
-
-/*  */
-
-/* body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-
-.container {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  background-color: lightblue;
-  border: 1px solid red;
-}
-
-#image {
-  position: absolute;
-  width: 100px;
-  height: 50px;
-} */

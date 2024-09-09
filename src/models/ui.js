@@ -8,10 +8,22 @@ const computerBoardContainer = document.getElementById("computer-game-board");
 const allPlayerShipImages = [
   ...document.querySelectorAll(".player-ship-image"),
 ];
+const playButton = document.getElementById("play-button");
+const playersCard = document.getElementById("players-card");
+const playerOneInput = document.getElementById("player-one-input");
+const playerTwoInput = document.getElementById("player-two-input");
+const playerBattleContainer = document.getElementById(
+  "player-battle-container"
+);
+const begginButton = document.getElementById("beggin-button");
+const placePlayerShipsCard = document.getElementById("place-player-ships-card");
+const battleCard = document.getElementById("battle-card");
+const playerName = document.getElementById("player-name");
+const computerName = document.getElementById("computer-name");
 
 // assign new players :
 const humanPlayer = new Player("human"); // player obj.
-const humnaPlayerGameBoard = humanPlayer.gameBoard; // player game board.
+const humanPlayerGameBoard = humanPlayer.gameBoard; // player game board.
 const computerPlayer = new Player("computer"); // computer obj.
 const computerPlayerGameBoard = computerPlayer.gameBoard; // computer game board.
 
@@ -29,8 +41,8 @@ const createPlayerGameBoardElements = (arr, container) => {
     }
   }
 };
-createPlayerGameBoardElements(humnaPlayerGameBoard.board, playerBoardContainer);
-// setup player ship types dom obj :
+
+// human player dom obj :
 const renderPlayerShipTypes = {
   allPreviousShipCoords: [],
   // display ship type elements :
@@ -78,12 +90,12 @@ const renderPlayerShipTypes = {
     playerSquares.map((square) =>
       square.addEventListener("click", () => {
         if (!shipGotPlaced) {
-          const currValidCoords = humnaPlayerGameBoard.getPlayerCurrValidCoords(
+          const currValidCoords = humanPlayerGameBoard.getPlayerCurrValidCoords(
             square,
             shipLength
           );
           if (!currValidCoords) return;
-          const isShiptValid = humnaPlayerGameBoard.isShiptCoordsValid(
+          const isShiptValid = humanPlayerGameBoard.isShiptCoordsValid(
             currValidCoords,
             this.allPreviousShipCoords
           );
@@ -115,6 +127,7 @@ allPlayerShipImages.map((ship) => {
   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
 });
 
+// computer player dom obj :
 const renderComputerShips = {
   render() {
     const allComputerShipsArr = this.getComputerShipTypes();
@@ -126,7 +139,6 @@ const renderComputerShips = {
     const allComputerShipImages = allPlayerShipImages.map((image) =>
       image.cloneNode(true)
     );
-    console.log(allComputerShipImages);
     // all computer ship types :
     const allShipTypesArr = [
       ["carrier-ship", 5, allComputerShipImages[0]],
@@ -172,26 +184,58 @@ const renderComputerShips = {
   },
 };
 
-// renderComputerShips.render();
-
-const begginButton = document.getElementById("beggin-button");
-// begginButton.addEventListener("click", renderComputerShips.render());
-const placePlayerShipsCard = document.getElementById("place-player-ships-card");
-const playerVSComputerCard = document.getElementById("player-vs-computer-card");
-
-// begginButton.addEventListener("click", () => renderComputerShips.render(), {
-//   once: true,
-// });
-
-// createPlayerGameBoardElements(
-//   computerPlayerGameBoard.board,
-//   computerBoardContainer
-// );
-
-function test() {
-  console.log(placePlayerShipsCard);
-  placePlayerShipsCard.style.display = "none";
-  playerVSComputerCard.style.display = "flex";
+// display place player ships card :
+function showPlacingPlayerShipsCard() {
+  // players name required :
+  if (playerOneInput.value == "" || playerTwoInput.value == "") {
+    alert("Must Enter Names!");
+    return;
+  }
+  // set styles :
+  playersCard.style.display = "none";
+  placePlayerShipsCard.style.display = "flex";
+  // creates player game board :
+  createPlayerGameBoardElements(
+    humanPlayerGameBoard.board,
+    playerBoardContainer
+  );
 }
 
-begginButton.addEventListener("click", test);
+// checks if all player ships placed :
+function isAllPlayerShipsPlaced() {
+  const playerShipTypes = document.querySelectorAll(".player-ship-type");
+  const allNestedShipImages = [...playerShipTypes].filter((ship) =>
+    ship.querySelector("img")
+  );
+  return allNestedShipImages.length == 0;
+}
+
+// display battle card :
+function showBattleCard() {
+  // checks if player ships are place :
+  const isPlayerShipsPlaced = isAllPlayerShipsPlaced();
+  if (!isPlayerShipsPlaced) {
+    alert("Must Place All Player Ships!");
+    return;
+  }
+  // set styles :
+  placePlayerShipsCard.style.display = "none";
+  battleCard.style.display = "flex";
+  playerName.textContent = `${playerOneInput.value.toUpperCase()} WATERS`;
+  computerName.textContent = `${playerTwoInput.value.toUpperCase()} WATERS`;
+  playerBattleContainer.appendChild(playerBoardContainer); // insert player board.
+  // creates computer game board :
+  createPlayerGameBoardElements(
+    computerPlayerGameBoard.board,
+    computerBoardContainer
+  );
+  // render computer ships :
+  renderComputerShips.render();
+  // console.log("human board", humanPlayerGameBoard.board);
+  // console.log("computer boad", computerPlayerGameBoard.board);
+}
+
+// play button event :
+playButton.addEventListener("click", showPlacingPlayerShipsCard);
+// beggin button event :
+begginButton.addEventListener("click", showBattleCard);

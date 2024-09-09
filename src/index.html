@@ -19,11 +19,11 @@
     </header>
     <main>
       <!-- players card -->
-      <div id="players-card" style="display: none">
+      <div id="players-card" style="display: flex">
         <div id="players-container">
           <div id="player-one-container">
             <label for="player-one-input">Human Player</label>
-            <input id="player-one-input" placeholder="Enter Name :" />
+            <input id="player-one-input" placeholder="Enter Name :" required />
             <i class="fa-solid fa-skull-crossbones"></i>
           </div>
           <span id="vs">VS</span>
@@ -33,7 +33,8 @@
               id="player-two-input"
               type="text"
               placeholder="Enter Name :"
-              value="HelperBot"
+              value="Computer"
+              required
             />
             <i class="fa-solid fa-robot"></i>
           </div>
@@ -80,26 +81,18 @@
         <button id="beggin-button">Beggin!</button>
       </div>
 
-      <div id="player-vs-computer-card">
-        <div id="computer-game-board"></div>
+      <!-- battle card styles -->
+      <div id="battle-card" style="display: none">
+        <div id="player-battle-container">
+          <div id="player-name">Player Waters</div>
+        </div>
         <div id="vs">VS</div>
-        <div id="computer-game-board"></div>
+        <div id="computer-battle-container">
+          <div id="computer-name">Computer Waters</div>
+          <div id="computer-game-board"></div>
+        </div>
       </div>
-      <!-- playing game card -->
-      <!-- <div id="play-game-card">
-        <div id="computer-game-board"></div>
-      </div> -->
     </main>
-    <footer>
-      footer
-      <!-- <img id="myImage" class="hover-zoom" /> -->
-    </footer>
+    <footer>footer</footer>
   </body>
 </html>
-
-<!-- <main> -->
-<!-- <div id="boards-container">
-        <div id="player-board-container"></div>
-        <div id="computer-board-container"></div> -->
-<!-- </div> -->
-<!-- </main> -->

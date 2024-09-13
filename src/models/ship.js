@@ -1,6 +1,7 @@
 // ship class :
 class Ship {
   constructor(shipName, shipLength) {
+    this.isShip = true;
     this.shipName = shipName;
     this.shipLength = shipLength;
     this.numberOfHits = 0;
@@ -13,8 +14,12 @@ class Ship {
   // checks if the ship is sunk or not :
   isSunk() {
     if (this.numberOfHits >= this.shipLength) {
+      console.log("sunk");
       return (this.isShipSunk = true);
-    } else return (this.isShipSunk = false);
+    } else {
+      console.log("not sunk");
+      return (this.isShipSunk = false);
+    }
   }
   // get ship same :
   getShipName() {

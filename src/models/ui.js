@@ -123,9 +123,9 @@ const renderPlayerShipTypes = {
   },
 };
 // player ship types click event :
-allPlayerShipImages.map((ship) => {
-  ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
-});
+// allPlayerShipImages.map((ship) => {
+//   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
+// });
 
 // computer player dom obj :
 const renderComputerShips = {
@@ -164,6 +164,7 @@ const renderComputerShips = {
         shipName,
         shipLength
       );
+      // zbe(computerValidCoords);
     });
   },
   getValidCoords(shipLength) {
@@ -194,11 +195,12 @@ function showPlacingPlayerShipsCard() {
   // set styles :
   playersCard.style.display = "none";
   placePlayerShipsCard.style.display = "flex";
+
   // creates player game board :
-  createPlayerGameBoardElements(
-    humanPlayerGameBoard.board,
-    playerBoardContainer
-  );
+  // createPlayerGameBoardElements(
+  //   humanPlayerGameBoard.board,
+  //   playerBoardContainer
+  // );
 }
 
 // checks if all player ships placed :
@@ -225,17 +227,49 @@ function showBattleCard() {
   computerName.textContent = `${playerTwoInput.value.toUpperCase()} WATERS`;
   playerBattleContainer.appendChild(playerBoardContainer); // insert player board.
   // creates computer game board :
-  createPlayerGameBoardElements(
-    computerPlayerGameBoard.board,
-    computerBoardContainer
-  );
+  // createPlayerGameBoardElements(
+  //   computerPlayerGameBoard.board,
+  //   computerBoardContainer
+  // );
   // render computer ships :
-  renderComputerShips.render();
+  // renderComputerShips.render();
   // console.log("human board", humanPlayerGameBoard.board);
   // console.log("computer boad", computerPlayerGameBoard.board);
 }
+createPlayerGameBoardElements(
+  computerPlayerGameBoard.board,
+  computerBoardContainer
+);
+createPlayerGameBoardElements(humanPlayerGameBoard.board, playerBoardContainer);
+
+// renderPlayerShipTypes.render(ship);
+// allPlayerShipImages.map((ship) => {
+//   renderPlayerShipTypes.render(ship);
+// });
+
+renderComputerShips.render();
 
 // play button event :
 playButton.addEventListener("click", showPlacingPlayerShipsCard);
 // beggin button event :
 begginButton.addEventListener("click", showBattleCard);
+
+// attacks computer game board :
+function attackComputerBoard() {
+  [...computerBoardContainer.children].map((square) => {
+    square.addEventListener("click", () => {
+      square.style.pointerEvents = "none";
+      const coords = [Number(square.dataset.x), Number(square.dataset.y)];
+      const [x, y] = coords;
+      const isCurrSquareShip = computerPlayerGameBoard.isSquareShip(x, y);
+      if (isCurrSquareShip) {
+        square.style.background = "red";
+        const currComputerShip = computerPlayerGameBoard.getWholeShip(x, y);
+        currComputerShip.hit();
+        // console.log(currComputerShip.);
+        // computerPlayerGameBoard.receiveAttack(x, y);
+      }
+    });
+  });
+}
+attackComputerBoard();

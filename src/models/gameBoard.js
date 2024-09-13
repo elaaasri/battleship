@@ -12,12 +12,13 @@ class GameBoard {
     for (let i = 0; i < this.rows; i++) {
       this.board[i] = [];
       for (let j = 0; j < this.columns; j++) {
-        this.board[i][j] = { coords: [i, j], missed: null };
+        this.board[i][j] = { coords: [i, j], isShip: false }; // curret problem
       }
     }
   }
   // place the ship in the correct coords :
   placeShip(row, column, shipType, shipLength) {
+    // curret problem
     const ship = new Ship(shipType, shipLength); // creates ship instance.
     this.board[row][column] = ship;
   }
@@ -65,8 +66,8 @@ class GameBoard {
         return cell.coords;
       });
     });
+    // get random coords :
     const randomValidIndex = Math.floor(Math.random() * allCoords.length);
-
     const randomCoords = allCoords[randomValidIndex][randomValidIndex];
     if (!randomCoords) return;
     const [x, y] = randomCoords;
@@ -83,21 +84,39 @@ class GameBoard {
     );
     return isShipCoordsWithingBoard ? allRightSideCoords : null;
   }
+  isSquareShip(x, y) {
+    const currSquare = this.board[x][y];
+    return currSquare.isShip;
+  }
   // checks if the attack hits a ship or not :
-  receiveAttack(row, column) {
-    const attackedCoordinates = this.board[row][column];
-    if (attackedCoordinates.value != 0) {
-      attackedCoordinates.hit(); // increases attacked ship hits.
-      return "attack hits the ship!";
-    } else {
-      attackedCoordinates.missed = true; // tracks missed attacks.
-      return "attack missed the ship!";
-    }
+  // receiveAttack(ship) {
+  //   const zbe = this.getTheWholeShip(row, column);
+  //   console.log(zbe);
+
+  //   // const currShip = this.board[row][column]; // get curr ship.
+  //   // get all target ship items :
+  //   // const allCurrShipItems = this.board.flatMap((row) =>
+  //   // row.filter((square) => square.shipName === currShip.shipName)
+  //   // );
+  //   // const zbe = allCurrShipItems[0]; // assign one item of ship as the whole ship :
+  //   ship.hit();
+  //   console.log(ship);
+  //   console.log(ship.isSunk());
+  // }
+  //
+  getWholeShip(row, column) {
+    const currShip = this.board[row][column]; // get curr ship.
+    // get all target ship items :
+    const allCurrShipItems = this.board.flatMap((row) =>
+      row.filter((square) => square.shipName === currShip.shipName)
+    );
+    const wholeShip = allCurrShipItems[0]; // assign one item of ship as the whole ship :
+    return wholeShip;
   }
   // checks if all ships are sunk :
   isAllShipsSunk() {
-    const allShips = [];
     for (const i in this.board) {
+      const allShips = [];
       for (const j in this.board[i]) {
         if (!this.board[i][j].hasOwnProperty("value"))
           allShips.push(this.board[i][j]);
@@ -108,3 +127,66 @@ class GameBoard {
   }
 }
 export default GameBoard;
+
+// once the ship sunk shows it on board :
+
+// working on making the hitted ship increases numberofhit on each same target square ship!
+// if (currSquare.isShip) {
+//   for (let i = 0; i < this.board.length; i++) {
+//     for (let j = 0; j < this.board[i].length; j++) {
+//       if (currSquare.shipName == this.board[i][j].shipName) {
+//         // console.log("target square", this.board[i][j]);
+//         const targetShip = this.board[i][j];
+//         targetShip.hit();
+//         // console.log(targetShip);
+//       }
+//     }
+//   }
+// }
+
+// hit() {
+// return this.numberOfHits++;
+// }
+// if (attackedCoordinates.value != 0) {
+//   attackedCoordinates.hit(); // increases attacked ship hits.
+//   return "attack hits the ship!";
+// } else {
+//   attackedCoordinates.missed = true; // tracks missed attacks.
+//   return "attack missed the ship!";
+// }
+
+// / const matchingSquares = this.board.flatMap((row) =>
+//   row.filter((square) => square.shipName === currSquare.shipName)
+// );
+// const matchingSquares = this.board.map((row) =>
+// row.filter((square) => {
+// return square.shipName == currSquare.shipName;
+// })
+// );
+//
+
+// checks if it's a ship :
+// if (currSquare.isShip) {
+//   // get all target ship items :
+//   const allTargetShipItems = this.board.flatMap((row) =>
+//     row.filter((square) => square.shipName === currSquare.shipName)
+//   );
+//   // hits every ship item :
+//   allTargetShipItems.map((item) => {
+//     return item.hit();
+//   });
+//   console.log(allTargetShipItems);
+// }
+// const allTargetShipItems = this.board.flatMap((row) =>
+//   row.filter((square) => square.shipName === currSquare.shipName)
+// );
+// // hits every ship item :
+// allTargetShipItems.map((item) => {
+//   return item.hit();
+// });
+
+// hits every ship item :
+// allTargetShipItems.map((item.isSunk());
+//   return item.hit();
+// });m) => {
+//   // console.log(ite

@@ -217,6 +217,11 @@ input {
   transform: scale(1.1);
   cursor: pointer;
 }
+/* fix hiding computer images */
+/* .computer-ship-image {
+  z-index: 10;
+  background-color: white;
+} */
 
 #carrier-ship {
   background-image: url("./images/ships/carrier.svg");

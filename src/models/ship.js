@@ -13,11 +13,16 @@ class Ship {
   }
   // checks if the ship is sunk or not :
   isSunk() {
+    return this.numberOfHits >= this.shipLength
+      ? (this.isShipSunk = true)
+      : this.isShipSunk;
+
     if (this.numberOfHits >= this.shipLength) {
-      console.log("sunk");
-      return (this.isShipSunk = true);
+      // console.log("sunk");
+      this.isShipSunk = true;
+      return this.isShipSunk;
     } else {
-      console.log("not sunk");
+      // console.log("not sunk");
       return (this.isShipSunk = false);
     }
   }

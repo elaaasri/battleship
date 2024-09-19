@@ -294,8 +294,20 @@ const playRound = () => {
     return shipHeadSquareImage;
   };
 
+  // hides curr ship hits :
+  const hideCurrShipHits = (currShipLength, shipSquareImage) => {
+    let currShipSquareItems = [];
+    while (currShipLength > 0) {
+      currShipSquareItems.push(shipSquareImage);
+      shipSquareImage = shipSquareImage.nextElementSibling;
+      currShipLength--;
+    }
+    currShipSquareItems.forEach((square) => {
+      square.style.background = "none";
+    });
+  };
+
   // manipulate curr clicked square :
-  let arr = [];
   const handleSquareClick = (currSquare) => {
     currSquare.style.pointerEvents = "none";
     // gets curr square coords.
@@ -306,25 +318,15 @@ const playRound = () => {
     // if curr square is a ship :
     if (currShip.isShip) {
       currSquare.style.background = "red";
-
-      // arr.push(currSquare);
-
       computerPlayerGameBoard.receiveAttack(currShip);
       computerPlayerGameBoard.makeAllShipItemsSunk(currShip);
       if (currShip.isSunk()) {
         const shipHeadSquareImage = getShipHeadSquareImage(currShip);
-        console.log(shipHeadSquareImage);
+        hideCurrShipHits(
+          currShip.shipLength,
+          shipHeadSquareImage.parentElement
+        );
         shipHeadSquareImage.style.display = "flex";
-        shipHeadSquareImage.style.position = "absolute";
-
-        // const otherShipSquareItems =
-        //   computerPlayerGameBoard.test(shipHeadSquareImage);
-
-        // console.log(otherShipSquareItems);
-
-        // arr.forEach((square) => {
-        //   square.style.background = "none";
-        // });
       }
     }
   };
@@ -337,100 +339,3 @@ const playRound = () => {
     console.log("attack player board");
   }
 };
-
-// 1 - For attacks, let the user click on a coordinate in the enemy Gameboard. Send the user input to methods on your objects, and re-render the boards to display the new information.
-// 2 - Players should take turns playing the game by attacking the enemy Gameboard. If you feel the need to keep track of the current player’s turn, it’s appropriate to manage that in this module, instead of another mentioned object.
-// 3 - The game is played against the computer, so make the ‘computer’ players capable of making random plays. The computer does not have to be smart, but it should know whether or not a given move is legal (i.e. it shouldn’t shoot the same coordinate twice).
-
-// const playRound = (currPlayer) => {
-//   console.log(currPlayer);
-
-//   if (currPlayer == "human") {
-//     console.log("attack computer board");
-//     [...computerBoardContainer.children].map((square) => {
-//       square.addEventListener("click", () => {
-//         square.style.pointerEvents = "none";
-//         const coords = [Number(square.dataset.x), Number(square.dataset.y)];
-//         const [x, y] = coords;
-//         const isCurrSquareShip = computerPlayerGameBoard.isSquareShip(x, y);
-//         console.log(computerPlayerGameBoard.board);
-//         // console.log(isCurrSquareShip);
-//         console.log(isCurrSquareShip);
-//         if (isCurrSquareShip) {
-//           console.log("zbe", enemyGameBoard);
-//           // enemyGameBoard.style.pointerEvents = "none";
-
-//           const allComputerShipImages = [
-//             ...document.querySelectorAll(".computer-ship-image"),
-//           ];
-
-//           square.style.background = "red";
-//           computerPlayerGameBoard.receiveAttack(x, y);
-//           let a = computerPlayerGameBoard.isShipSunk(x, y);
-//           if (a == null) return;
-
-//           let mostLeftShipItem = [...allComputerShipImages].find(
-//             (image) => image.id == a.shipName
-//           );
-
-//           // console.log(mostLeftShipItem);
-//           mostLeftShipItem.style.display = "none"; // Hide the first matched image
-//         } else {
-//           computerBoardContainer.style.pointerEvents = "none";
-//           currPlayer = "zbe";
-//         }
-//       });
-//     });
-
-//     // attackEnemyBoard(computerBoardContainer);
-//   } else {
-//     console.log("attack player board");
-//     // attackEnemyBoard(playerBoardContainer);
-//   }
-// };
-
-// attacks computer game board :
-// function test(enemyGameBoard) {
-//   [...enemyGameBoard.children].map((square) => {
-//     square.addEventListener("click", () => {
-//       square.style.pointerEvents = "none";
-//       const coords = [Number(square.dataset.x), Number(square.dataset.y)];
-//       const [x, y] = coords;
-//       const isCurrSquareShip = computerPlayerGameBoard.isSquareShip(x, y);
-//       console.log(computerPlayerGameBoard.board);
-
-//       // console.log(isCurrSquareShip);
-//       if (isCurrSquareShip) {
-//         console.log("zbe", enemyGameBoard);
-//         // enemyGameBoard.style.pointerEvents = "none";
-
-//         const allComputerShipImages = [
-//           ...document.querySelectorAll(".computer-ship-image"),
-//         ];
-//         square.style.background = "red";
-//         computerPlayerGameBoard.receiveAttack(x, y);
-//         let a = computerPlayerGameBoard.isShipSunk(x, y);
-//         if (a == null) return;
-
-//         let mostLeftShipItem = [...allComputerShipImages].find(
-//           (image) => image.id == a.shipName
-//         );
-
-//         // console.log(mostLeftShipItem);
-//         mostLeftShipItem.style.display = "none"; // Hide the first matched image
-//       }
-//     });
-//   });
-// }
-// test();
-
-// // playRound();
-// class Attack {
-//   constructor(name) {
-//     this.name = name;
-//   }
-//   // get player name :
-//   attackEnemyBoard() {
-//     return this.name;
-//   }
-// }

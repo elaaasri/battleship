@@ -114,10 +114,21 @@ class GameBoard {
     allCurrShipItems.forEach((ship) => ship.hit());
   }
 
-  // get other ship square items :
-  getOtherShipSquareItems(currShipHead) {
-    console.log(currShipHead);
-  }
+  // // get other ship square items :
+  // getOtherShipSquareItems(currShipHead) {
+  //   console.log(currShipHead);
+
+  //   //   // get all right side coords :
+  //   // const [x, y] = coords;
+  //   // const allRightSideCoords = [
+  //   //   [x, y],
+  //   //   [x, y + 1],
+  //   //   [x, y + 2],
+  //   //   [x, y + 3],
+  //   //   [x, y + 4],
+  //   // ].slice(0, shipSize);
+  //   // return allRightSideCoords;
+  // }
   // checks if all ships are sunk :
   isAllShipsSunk() {
     for (const i in this.board) {

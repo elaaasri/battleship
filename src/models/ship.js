@@ -7,6 +7,14 @@ class Ship {
     this.numberOfHits = 0;
     this.isShipSunk = false;
   }
+  // get ship same :
+  getShipName() {
+    return this.shipName;
+  }
+  // get ship length :
+  getShipLength() {
+    return this.shipLength;
+  }
   // increases numbers of hits :
   hit() {
     return this.numberOfHits++;
@@ -16,23 +24,6 @@ class Ship {
     return this.numberOfHits >= this.shipLength
       ? (this.isShipSunk = true)
       : this.isShipSunk;
-
-    if (this.numberOfHits >= this.shipLength) {
-      // console.log("sunk");
-      this.isShipSunk = true;
-      return this.isShipSunk;
-    } else {
-      // console.log("not sunk");
-      return (this.isShipSunk = false);
-    }
-  }
-  // get ship same :
-  getShipName() {
-    return this.shipName;
-  }
-  // get ship length :
-  getShipLength() {
-    return this.shipLength;
   }
 }
 export default Ship;

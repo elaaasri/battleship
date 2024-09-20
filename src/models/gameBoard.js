@@ -57,14 +57,13 @@ class GameBoard {
   // get all right side coords :
   getAllRightSideCoords(coords, shipSize) {
     const [x, y] = coords;
-    const allRightSideCoords = [
+    return [
       [x, y],
       [x, y + 1],
       [x, y + 2],
       [x, y + 3],
       [x, y + 4],
     ].slice(0, shipSize);
-    return allRightSideCoords;
   }
   // get random computer valid ship coords :
   getRandomComputerShipValidCoords(shipSize) {
@@ -77,7 +76,6 @@ class GameBoard {
     const randomValidIndex = Math.floor(Math.random() * allCoords.length);
     const randomCoords = allCoords[randomValidIndex][randomValidIndex];
     if (!randomCoords) return;
-    // const [x, y] = randomCoords;
     const allRightSideCoords = this.getAllRightSideCoords(
       randomCoords,
       shipSize
@@ -95,13 +93,12 @@ class GameBoard {
   }
   // get all curr ship items :
   getAllCurrShipItems(currShip) {
-    const allCurrShipItems = this.board.flatMap((row) =>
+    return this.board.flatMap((row) =>
       row.filter((square) => square.shipName === currShip.shipName)
     );
-    return allCurrShipItems;
   }
   // checks if all curr ship items are sunk :
-  makeAllShipItemsSunk(currShip) {
+  makeAllCurrShipItemsSunk(currShip) {
     const allCurrShipItems = this.getAllCurrShipItems(currShip);
     // checks if all curr ship items are sunk :
     allCurrShipItems.forEach((ship) => ship.isSunk());
@@ -113,22 +110,6 @@ class GameBoard {
     // hit all curr ship items :
     allCurrShipItems.forEach((ship) => ship.hit());
   }
-
-  // // get other ship square items :
-  // getOtherShipSquareItems(currShipHead) {
-  //   console.log(currShipHead);
-
-  //   //   // get all right side coords :
-  //   // const [x, y] = coords;
-  //   // const allRightSideCoords = [
-  //   //   [x, y],
-  //   //   [x, y + 1],
-  //   //   [x, y + 2],
-  //   //   [x, y + 3],
-  //   //   [x, y + 4],
-  //   // ].slice(0, shipSize);
-  //   // return allRightSideCoords;
-  // }
   // checks if all ships are sunk :
   isAllShipsSunk() {
     for (const i in this.board) {

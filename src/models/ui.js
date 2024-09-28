@@ -23,10 +23,17 @@ const playerName = document.getElementById("player-name");
 const computerName = document.getElementById("computer-name");
 
 // assign new players :
-const humanPlayer = new Player("human"); // player obj.
-const humanPlayerGameBoard = humanPlayer.gameBoard; // player game board.
-const computerPlayer = new Player("computer"); // computer obj.
-const computerPlayerGameBoard = computerPlayer.gameBoard; // computer game board.
+const humanPlayer = new Player("humanPlayer"); // player obj.
+const humanPlayerGameBoard = humanPlayer.getPlayerBoard(); // player game board.
+const humanPlayerGameBoardName = humanPlayerGameBoard.getBoardName();
+
+// console.log(humanPlayer);
+// console.log(humanPlayerGameBoard);
+// console.log(humanPlayerGameBoardName);
+//
+const computerPlayer = new Player("computerPlayer"); // computer obj.
+const computerPlayerGameBoard = computerPlayer.getPlayerBoard(); // computer game board.
+const computerPlayerGameBoardName = computerPlayerGameBoard.getBoardName();
 
 // create player game board elements :
 const createGameBoardElements = (arr, container) => {
@@ -50,6 +57,7 @@ const renderPlayerShipTypes = {
   render(shipImage) {
     shipImage.style.pointerEvents = "none";
     const currShipObj = humanPlayer.createShipType(shipImage.id);
+
     const currShipName = currShipObj.getShipName();
     const currShipLength = currShipObj.getShipLength();
     this.resizePlayerShipImage(shipImage, currShipLength); // resize ship image.
@@ -169,14 +177,13 @@ const renderComputerShips = {
         shipName,
         shipLength
       );
-      // zbe(computerValidCoords);
     });
   },
   getValidCoords(shipLength) {
     let coords = null;
     while (!coords) {
       coords =
-        computerPlayerGameBoard.getRandomComputerShipValidCoords(shipLength);
+        computerPlayerGameBoard.getRandomComputerShipValidCoord(shipLength);
     }
     return coords;
   },
@@ -251,17 +258,18 @@ playButton.addEventListener("click", () => {
   // show player placing card :
   showPlacingPlayerShipsCard();
   // creates player game board :
-  createGameBoardElements(humanPlayerGameBoard.board, playerBoardContainer);
-  // render player ship types event :
-  allPlayerShipImages.map((ship) => {
-    ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
-  });
+  // createGameBoardElements(humanPlayerGameBoard.board, playerBoardContainer);
+  // // render player ship types event :
+  // allPlayerShipImages.map((ship) => {
+  //   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
+  // });
+  // triggers battle funcs :
 });
+
 // beggin button event :
 begginButton.addEventListener("click", () => {
   // checks if player ships are place :
   const isPlayerShipsPlaced = isAllPlayerShipsPlaced();
-  console.log(isPlayerShipsPlaced);
   if (!isPlayerShipsPlaced) return;
   // show battle card :
   showBattleCard();
@@ -272,38 +280,96 @@ begginButton.addEventListener("click", () => {
   );
   // render computer ships :
   renderComputerShips.render();
-  // plays the battle :
-  playRound();
-  // console.log("human board", humanPlayerGameBoard.board);
-  // console.log("computer boad", computerPlayerGameBoard.board);
+  // starts the battle :
+  startBattle.togglePlayers(humanPlayer.getName());
 });
 
-let currPlayer = humanPlayer.getName();
-const playRound = () => {
+const startBattle = {
+  // toggles players rounds :
+  togglePlayers(currentPlayer) {
+    playerBoardContainer.style.pointerEvents = "none";
+    computerBoardContainer.style.pointerEvents = "none";
+    // toggle players round :
+    if (currentPlayer == humanPlayer.getName()) {
+      console.log("player round!");
+      this.attackEnemyBoard(computerBoardContainer, computerPlayerGameBoard);
+    } else if (currentPlayer == computerPlayer.getName()) {
+      console.log("computer round!");
+      const randomPlayerValidCoord =
+        humanPlayerGameBoard.getRandomPlayerGameBoardValidCoord(
+          playerBoardContainer
+        );
+      console.log(randomPlayerValidCoord);
+      const isPlayerShip = humanPlayerGameBoard.checkPlayerCoordIsAShip(
+        randomPlayerValidCoord
+      );
+      console.log(isPlayerShip);
+      // this.attackEnemyBoard(playerBoardContainer, humanPlayerGameBoard);
+    }
+  },
+
   // attacks enemy board :
-  const attackEnemyBoard = (enemyBoardContainer) => {
+  attackEnemyBoard(enemyBoardContainer, enemyGameBoard) {
+    enemyBoardContainer.style.pointerEvents = "auto";
+    enemyBoardContainer.style.cursor = "pointer";
+
     [...enemyBoardContainer.children].forEach((square) => {
-      square.addEventListener("click", () => handleSquareClick(square));
+      square.addEventListener("click", () => {
+        console.log("#".repeat(30));
+        square.style.pointerEvents = "none";
+        this.handleSquareClick(square, enemyGameBoard);
+      });
     });
-  };
+  },
+
+  // manipulate curr clicked square :
+  handleSquareClick(currSquare, enemyGameBoard) {
+    const currCoords = this.getCurrCoords(currSquare); // gets curr square coords.
+    const [x, y] = currCoords;
+    const currShip = enemyGameBoard.getCurrShip(x, y); // checks if curr square is a ship :
+    console.log("curr ship", currShip);
+    // stop executing if no ship :
+    if (!currShip.isShip) {
+      if (enemyGameBoard == computerPlayerGameBoard) {
+        this.togglePlayers(computerPlayer.getName());
+      } else if (enemyGameBoard == humanPlayerGameBoard) {
+        this.togglePlayers(humanPlayer.getName());
+      }
+      return;
+    }
+
+    // triggers battle funcs :
+    currSquare.style.background = "red";
+    enemyGameBoard.receiveAttack(currShip);
+    enemyGameBoard.isAllCurrShipItemsSunk(currShip);
+    if (currShip.isSunk()) {
+      const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+      this.hideCurrShipHits(
+        currShip.getShipLength(),
+        shipHeadSquareImage.parentElement
+      );
+      shipHeadSquareImage.style.display = "flex";
+    }
+    // this.togglePlayers(humanPlayer.getName());
+  },
 
   // get current coords :
-  const getCurrCoords = (currSquare) => {
+  getCurrCoords(currSquare) {
     return [Number(currSquare.dataset.x), Number(currSquare.dataset.y)];
-  };
+  },
 
   // get most left shi head square nested image :
-  const getShipHeadSquareImage = (currShip) => {
+  getShipHeadSquareImage(currShip) {
     const allComputerShipImages = [
       ...document.querySelectorAll(".computer-ship-image"),
     ];
     return [...allComputerShipImages].find(
       (image) => image.id == currShip.shipName
     );
-  };
+  },
 
   // hides curr ship hits :
-  const hideCurrShipHits = (currShipLength, shipSquareImage) => {
+  hideCurrShipHits(currShipLength, shipSquareImage) {
     const currShipNextSiblings = [];
     // get curr ship next siblings :
     for (let i = 0; i < currShipLength; i++) {
@@ -314,34 +380,16 @@ const playRound = () => {
     currShipNextSiblings.forEach((square) => {
       square.style.background = "none";
     });
-  };
-
-  // manipulate curr clicked square :
-  const handleSquareClick = (currSquare) => {
-    currSquare.style.pointerEvents = "none";
-    const [x, y] = getCurrCoords(currSquare); // gets curr square coords.
-    const currShip = computerPlayerGameBoard.getCurrShip(x, y); // checks if curr square is a ship :
-    //  stop executing if no ship :
-    if (!currShip.isShip) return;
-    // triggers battle funcs :
-    currSquare.style.background = "red";
-    computerPlayerGameBoard.receiveAttack(currShip);
-    computerPlayerGameBoard.makeAllCurrShipItemsSunk(currShip);
-    if (currShip.isSunk()) {
-      const shipHeadSquareImage = getShipHeadSquareImage(currShip);
-      hideCurrShipHits(
-        currShip.getShipLength(),
-        shipHeadSquareImage.parentElement
-      );
-      shipHeadSquareImage.style.display = "flex";
-    }
-  };
-
-  // toggle players round :
-  if (currPlayer == "human") {
-    console.log("attack computer board");
-    attackEnemyBoard(computerBoardContainer);
-  } else {
-    console.log("attack player board");
-  }
+  },
 };
+
+createGameBoardElements(humanPlayerGameBoard.board, playerBoardContainer);
+// render player ship types event :
+allPlayerShipImages.map((ship) => {
+  ship.addEventListener("click", renderPlayerShipTypes.render(ship));
+});
+
+// working on cleaning the code :
+// funcs added :
+// getRandomPlayerGameBoardValidCoord
+// checkPlayerCoordIsAShip

@@ -166,11 +166,12 @@ input {
   height: 280px;
   box-shadow: 0px 15px 40px black;
 }
-#computer-game-board div {
+/* #computer-game-board div {
   cursor: pointer;
-}
-#computer-game-board div:hover {
-  background-color: red;
+} */
+#computer-game-board div:hover,
+#player-game-board div:hover {
+  background-color: yellow;
 }
 
 #player-ship-type-container {

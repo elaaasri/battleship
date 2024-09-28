@@ -4,12 +4,16 @@ import Ship from "./ship.js";
 class Player {
   constructor(name) {
     this.name = name;
-    this.gameBoard = new GameBoard();
+    this.gameBoard = new GameBoard(this.name);
     this.gameBoard.createBoard();
   }
   // get player name :
   getName() {
     return this.name;
+  }
+  // get player board :
+  getPlayerBoard() {
+    return this.gameBoard;
   }
   // set player ship position :
   setShipPositionOnBoard(correctCoords, shipName, shipLength) {
@@ -29,6 +33,7 @@ class Player {
       "destroyer-ship": 2,
     };
     const shipLength = allShipTypes[shipName];
+    
     return new Ship(shipName, shipLength);
   }
 }

@@ -3,8 +3,8 @@ import Player from "./player";
 // import GameBoard from "./gameBoard";
 
 // dom elements :
-const playerBoardContainer = document.getElementById("player-game-board");
-const computerBoardContainer = document.getElementById("computer-game-board");
+const playerBoardElement = document.getElementById("player-game-board");
+const computerBoardElement = document.getElementById("computer-game-board");
 const allPlayerShipImages = [
   ...document.querySelectorAll(".player-ship-image"),
 ];
@@ -24,16 +24,16 @@ const computerName = document.getElementById("computer-name");
 
 // assign new players :
 const humanPlayer = new Player("humanPlayer"); // player obj.
-const humanPlayerGameBoard = humanPlayer.getPlayerBoard(); // player game board.
-const humanPlayerGameBoardName = humanPlayerGameBoard.getBoardName();
+const humanGameBoardObject = humanPlayer.getPlayerBoard(); // player game board.
+const humanGameBoardObjectName = humanGameBoardObject.getBoardName();
 
 // console.log(humanPlayer);
-// console.log(humanPlayerGameBoard);
-// console.log(humanPlayerGameBoardName);
+// console.log(humanGameBoardObject);
+// console.log(humanGameBoardObjectName);
 //
 const computerPlayer = new Player("computerPlayer"); // computer obj.
-const computerPlayerGameBoard = computerPlayer.getPlayerBoard(); // computer game board.
-const computerPlayerGameBoardName = computerPlayerGameBoard.getBoardName();
+const computerGameBoardObject = computerPlayer.getPlayerBoard(); // computer game board.
+const computerGameBoardObjectName = computerGameBoardObject.getBoardName();
 
 // create player game board elements :
 const createGameBoardElements = (arr, container) => {
@@ -57,7 +57,6 @@ const renderPlayerShipTypes = {
   render(shipImage) {
     shipImage.style.pointerEvents = "none";
     const currShipObj = humanPlayer.createShipType(shipImage.id);
-
     const currShipName = currShipObj.getShipName();
     const currShipLength = currShipObj.getShipLength();
     this.resizePlayerShipImage(shipImage, currShipLength); // resize ship image.
@@ -93,18 +92,18 @@ const renderPlayerShipTypes = {
   },
   // handle player square click event :
   handlePlayerSquareEvent(shipImage, handleMouse, shipName, shipLength) {
-    const playerSquares = [...playerBoardContainer.children]; // player squares.
+    const playerSquares = [...playerBoardElement.children]; // player squares.
     let shipGotPlaced = false;
     // player square click event :
     playerSquares.map((square) =>
       square.addEventListener("click", () => {
         if (!shipGotPlaced) {
-          const currValidCoords = humanPlayerGameBoard.getPlayerCurrValidCoords(
+          const currValidCoords = humanGameBoardObject.getPlayerCurrValidCoords(
             square,
             shipLength
           );
           if (!currValidCoords) return;
-          const isShiptValid = humanPlayerGameBoard.isShipCoordsValid(
+          const isShiptValid = humanGameBoardObject.isShipCoordsValid(
             currValidCoords,
             this.allPreviousShipCoords
           );
@@ -183,7 +182,7 @@ const renderComputerShips = {
     let coords = null;
     while (!coords) {
       coords =
-        computerPlayerGameBoard.getRandomComputerShipValidCoord(shipLength);
+        computerGameBoardObject.getRandomComputerShipValidCoord(shipLength);
     }
     return coords;
   },
@@ -191,7 +190,7 @@ const renderComputerShips = {
   placeComputerShipsOnBoard(validCoord, shipImage, shipLength) {
     renderPlayerShipTypes.resizePlayerShipImage(shipImage, shipLength);
     const [x, y] = validCoord;
-    const targetSquare = [...computerBoardContainer.children].find(
+    const targetSquare = [...computerBoardElement.children].find(
       (square) => +square.dataset.x == x && +square.dataset.y == y
     );
     renderPlayerShipTypes.placeShipOnBoard(targetSquare, shipImage);
@@ -236,7 +235,7 @@ const showBattleCard = () => {
   battleCard.style.display = "flex";
   playerName.textContent = `${playerOneInput.value.toUpperCase()} WATERS`;
   computerName.textContent = `${playerTwoInput.value.toUpperCase()} WATERS`;
-  playerBattleContainer.appendChild(playerBoardContainer); // insert player board.
+  playerBattleContainer.appendChild(playerBoardElement); // insert player board.
 };
 
 // checks players names validity :
@@ -258,7 +257,7 @@ playButton.addEventListener("click", () => {
   // show player placing card :
   showPlacingPlayerShipsCard();
   // creates player game board :
-  // createGameBoardElements(humanPlayerGameBoard.board, playerBoardContainer);
+  // createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
   // // render player ship types event :
   // allPlayerShipImages.map((ship) => {
   //   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
@@ -274,10 +273,7 @@ begginButton.addEventListener("click", () => {
   // show battle card :
   showBattleCard();
   // creates computer game board :
-  createGameBoardElements(
-    computerPlayerGameBoard.board,
-    computerBoardContainer
-  );
+  createGameBoardElements(computerGameBoardObject.board, computerBoardElement);
   // render computer ships :
   renderComputerShips.render();
   // starts the battle :
@@ -287,77 +283,90 @@ begginButton.addEventListener("click", () => {
 const startBattle = {
   // toggles players rounds :
   togglePlayers(currentPlayer) {
-    playerBoardContainer.style.pointerEvents = "none";
-    computerBoardContainer.style.pointerEvents = "none";
+    playerBoardElement.style.pointerEvents = "none";
+    computerBoardElement.style.pointerEvents = "none";
+    console.log("CURRENT PLAYER!", currentPlayer);
     // toggle players round :
     if (currentPlayer == humanPlayer.getName()) {
-      console.log("player round!");
-      this.attackEnemyBoard(computerBoardContainer, computerPlayerGameBoard);
+      this.attackComputerPlayer(computerBoardElement, computerGameBoardObject);
     } else if (currentPlayer == computerPlayer.getName()) {
-      console.log("computer round!");
-      const randomPlayerValidCoord =
-        humanPlayerGameBoard.getRandomPlayerGameBoardValidCoord(
-          playerBoardContainer
-        );
-      console.log(randomPlayerValidCoord);
-      const isPlayerShip = humanPlayerGameBoard.checkPlayerCoordIsAShip(
-        randomPlayerValidCoord
-      );
-      console.log(isPlayerShip);
-      // this.attackEnemyBoard(playerBoardContainer, humanPlayerGameBoard);
+      this.attackHumanPlayer(playerBoardElement, humanGameBoardObject);
     }
   },
-
-  // attacks enemy board :
-  attackEnemyBoard(enemyBoardContainer, enemyGameBoard) {
-    enemyBoardContainer.style.pointerEvents = "auto";
-    enemyBoardContainer.style.cursor = "pointer";
-
-    [...enemyBoardContainer.children].forEach((square) => {
-      square.addEventListener("click", () => {
-        console.log("#".repeat(30));
+  // attack computer player :
+  attackComputerPlayer(boardElement, boardObject) {
+    boardElement.style.pointerEvents = "auto";
+    boardElement.style.cursor = "pointer";
+    // board element event :
+    [...boardElement.children].forEach((square) => {
+      const newSquare = square.cloneNode(true);
+      square.replaceWith(newSquare); // Replace the old square with the new one
+      newSquare.addEventListener("click", () => {
+        console.log("#".repeat(20));
         square.style.pointerEvents = "none";
-        this.handleSquareClick(square, enemyGameBoard);
+        const currCoords = this.getCurrCoords(square); // gets curr square coords.
+        const [x, y] = currCoords;
+        const currShip = boardObject.getCurrShip(x, y); // checks if curr square is a ship :
+        // stop executing if no ship :
+        if (!currShip.isShip) {
+          this.togglePlayers(computerPlayer.getName());
+          return;
+        }
+        // triggers battle funcs :
+        square.style.background = "red";
+        boardObject.receiveAttack(currShip);
+        console.log("current computer ship ", currShip);
+        console.log("is it a ship", currShip.isShip);
+        if (currShip.isSunk()) {
+          const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+          this.hideCurrShipHits(
+            currShip.getShipLength(),
+            shipHeadSquareImage.parentElement
+          );
+          shipHeadSquareImage.style.display = "flex";
+        }
       });
     });
   },
-
-  // manipulate curr clicked square :
-  handleSquareClick(currSquare, enemyGameBoard) {
-    const currCoords = this.getCurrCoords(currSquare); // gets curr square coords.
-    const [x, y] = currCoords;
-    const currShip = enemyGameBoard.getCurrShip(x, y); // checks if curr square is a ship :
-    console.log("curr ship", currShip);
-    // stop executing if no ship :
+  // attack human player :
+  attackHumanPlayer(boardElement, boardObject) {
+    boardElement.style.pointerEvents = "auto";
+    boardElement.style.cursor = "pointer";
+    // get random player valid coord :
+    const randomPlayerValidCoord = boardObject.getRandomPlayerValidCoord();
+    // console.log("random", randomPlayerValidCoord);
+    const [x, y] = randomPlayerValidCoord;
+    // get the current square element :
+    const currSquare = [...boardElement.children].find(
+      (square) => +square.dataset.x == x && +square.dataset.y == y
+    );
+    currSquare.style.pointerEvents = "none";
+    // get current ship object :
+    const currShip = boardObject.getCurrShip(x, y);
+    currSquare.style.background = currShip.isShip ? "red" : "blue";
     if (!currShip.isShip) {
-      if (enemyGameBoard == computerPlayerGameBoard) {
-        this.togglePlayers(computerPlayer.getName());
-      } else if (enemyGameBoard == humanPlayerGameBoard) {
-        this.togglePlayers(humanPlayer.getName());
-      }
+      console.log("not a ship");
+      this.togglePlayers(humanPlayer.getName());
       return;
     }
 
     // triggers battle funcs :
-    currSquare.style.background = "red";
-    enemyGameBoard.receiveAttack(currShip);
-    enemyGameBoard.isAllCurrShipItemsSunk(currShip);
-    if (currShip.isSunk()) {
-      const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
-      this.hideCurrShipHits(
-        currShip.getShipLength(),
-        shipHeadSquareImage.parentElement
-      );
-      shipHeadSquareImage.style.display = "flex";
-    }
-    // this.togglePlayers(humanPlayer.getName());
+    // currSquare.style.background = "red";
+    // boardObject.receiveAttack(currShip);
+    // console.log(currShip);
+    // if (currShip.isSunk()) {
+    //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+    //   this.hideCurrShipHits(
+    //     currShip.getShipLength(),
+    //     shipHeadSquareImage.parentElement
+    //   );
+    //   shipHeadSquareImage.style.display = "flex";
+    // }
   },
-
   // get current coords :
   getCurrCoords(currSquare) {
     return [Number(currSquare.dataset.x), Number(currSquare.dataset.y)];
   },
-
   // get most left shi head square nested image :
   getShipHeadSquareImage(currShip) {
     const allComputerShipImages = [
@@ -367,7 +376,6 @@ const startBattle = {
       (image) => image.id == currShip.shipName
     );
   },
-
   // hides curr ship hits :
   hideCurrShipHits(currShipLength, shipSquareImage) {
     const currShipNextSiblings = [];
@@ -383,7 +391,7 @@ const startBattle = {
   },
 };
 
-createGameBoardElements(humanPlayerGameBoard.board, playerBoardContainer);
+createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
 // render player ship types event :
 allPlayerShipImages.map((ship) => {
   ship.addEventListener("click", renderPlayerShipTypes.render(ship));
@@ -391,5 +399,106 @@ allPlayerShipImages.map((ship) => {
 
 // working on cleaning the code :
 // funcs added :
-// getRandomPlayerGameBoardValidCoord
+// getRandomPlayerValidCoord
 // checkPlayerCoordIsAShip
+
+// working on clean attackHumanPlayer funcion
+// make computer make random valid move
+// remove square events!
+
+// // attack human player :
+// attackHumanPlayer(boardElement, boardObject) {
+//   boardElement.style.pointerEvents = "auto";
+//   boardElement.style.cursor = "pointer";
+//   const allCoords = this.getAllCoords(boardElement); // get all coords.
+//   // board element event :
+//   [...boardElement.children].forEach((square) => {
+//     square.addEventListener("click", () => {
+//       console.log(square);
+//       square.style.pointerEvents = "none";
+//       const randomPlayerValidCoord =
+//         boardObject.getRandomPlayerValidCoord(allCoords);
+//       const [x, y] = randomPlayerValidCoord;
+//       console.log(boardObject);
+//       const currShip = boardObject.getCurrShip(x, y);
+//       if (!currShip.isShip) {
+//         this.togglePlayers(humanPlayer.getName());
+//         return;
+//       }
+//       // // triggers battle funcs :
+//       square.style.background = "red";
+//       // boardObject.receiveAttack(currShip);
+//       // boardObject.isAllCurrShipItemsSunk(currShip);
+//       // if (currShip.isSunk()) {
+//       //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+//       //   this.hideCurrShipHits(
+//       //     currShip.getShipLength(),
+//       //     shipHeadSquareImage.parentElement
+//       //   );
+//       //   shipHeadSquareImage.style.display = "flex";
+//       // }
+
+//       // const isPlayerShip = humanGameBoardObject.checkPlayerCoordIsAShip(
+//       //   randomPlayerValidCoord
+//       // );
+
+//       console.log(randomPlayerValidCoord);
+
+//       console.log("#".repeat(30));
+//       // const currCoords = this.getCurrCoords(square); // gets curr square coords.
+//       // const [x, y] = currCoords;
+//       // const currShip = boardObject.getCurrShip(x, y); // checks if curr square is a ship :
+//       // console.log("curr ship", currShip);
+//       // // stop executing if no ship :
+//       // if (!currShip.isShip) {
+//       //   this.togglePlayers(computerPlayer.getName());
+//       //   return;
+//       // }
+//       // // triggers battle funcs :
+//       // square.style.background = "red";
+//       // boardObject.receiveAttack(currShip);
+//       // boardObject.isAllCurrShipItemsSunk(currShip);
+//       // if (currShip.isSunk()) {
+//       //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+//       //   this.hideCurrShipHits(
+//       //     currShip.getShipLength(),
+//       //     shipHeadSquareImage.parentElement
+//       //   );
+//       //   shipHeadSquareImage.style.display = "flex";
+//       // }
+//       console.log("#".repeat(30));
+
+//       // const randomPlayerValidCoord =
+//       //   humanGameBoardObject.getRandomPlayerValidCoord(playerBoardElement);
+//       // console.log(randomPlayerValidCoord);
+//       // const isPlayerShip = humanGameBoardObject.checkPlayerCoordIsAShip(
+//       //   randomPlayerValidCoord
+//       // );
+//       // console.log(isPlayerShip);
+
+//       // triggers battle funcs :
+//       // currSquare.style.background = "red";
+//       // enemyGameBoard.receiveAttack(currShip);
+//       // enemyGameBoard.isAllCurrShipItemsSunk(currShip);
+//       // if (currShip.isSunk()) {
+//       //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+//       //   this.hideCurrShipHits(
+//       //     currShip.getShipLength(),
+//       //     shipHeadSquareImage.parentElement
+//       //   );
+//       //   shipHeadSquareImage.style.display = "flex";
+//       // }
+//     });
+//   });
+// },
+
+// const obj = {
+//   // get all coords :
+//   getAllCoords(playerElementContainer) {
+//     this.allCoords = [...playerElementContainer.children].map((square) => [
+//       +square.dataset.x,
+//       +square.dataset.y,
+//     ]);
+//     return this.allCoords;
+//   },
+// };

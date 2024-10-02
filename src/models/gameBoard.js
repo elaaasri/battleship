@@ -7,6 +7,7 @@ class GameBoard {
     this.rows = 10;
     this.columns = 10;
     this.board = [];
+    this.allCoords = [];
   }
   // get board name :
   getBoardName() {
@@ -22,6 +23,7 @@ class GameBoard {
       this.board[i] = [];
       for (let j = 0; j < this.columns; j++) {
         this.board[i][j] = { coords: [i, j], isShip: false };
+        this.allCoords.push([i, j]);
       }
     }
   }
@@ -81,7 +83,7 @@ class GameBoard {
         return cell.coords;
       });
     });
-    // console.log(allCoords);
+    // console.log(allCoords); // fix problem!.
     // get random coords :
     const randomValidIndex = Math.floor(Math.random() * allCoords.length);
     const randomCoord = allCoords[randomValidIndex][randomValidIndex];
@@ -107,30 +109,28 @@ class GameBoard {
       row.filter((square) => square.shipName === currShip.shipName)
     );
   }
-  // checks if all curr ship items are sunk :
-  isAllCurrShipItemsSunk(currShip) {
-    const allCurrShipItems = this.getAllCurrShipItems(currShip);
-    // checks if all curr ship items are sunk :
-    allCurrShipItems.forEach((ship) => ship.isSunk());
-    console.log(allCurrShipItems);
-  }
   // receive attack :
   receiveAttack(currShip) {
     const allCurrShipItems = this.getAllCurrShipItems(currShip);
-    // hit all curr ship items :
-    allCurrShipItems.forEach((ship) => ship.hit());
+    // hits and sunk all ship on game board object.
+    allCurrShipItems.forEach((ship) => {
+      ship.hit();
+      ship.isSunk();
+    });
+    // console.log("all ship items", allCurrShipItems);
+    // console.log(currShip.getBoardName, this.board);
   }
   // get random player game board valid coords :
-  getRandomPlayerGameBoardValidCoord(playerContainer) {
-    const allCoords = [...playerContainer.children].map((square) => [
-      +square.dataset.x,
-      +square.dataset.y,
-    ]);
-    const randomValidIndex = Math.floor(Math.random() * allCoords.length);
-    const randomCoord = allCoords[randomValidIndex];
+  getRandomPlayerValidCoord() {
+    // if (this.allCoords.length == 0) return;
+    // if (!this.allCoords) return;
+    const randomValidIndex = Math.floor(Math.random() * this.allCoords.length);
+    const randomCoord = this.allCoords[randomValidIndex];
     // update all coords array so it shouldn’t get the same coord twice:
-    const randomCoordIndex = allCoords.indexOf(randomCoord);
-    allCoords.splice(randomCoordIndex, 1);
+    const randomCoordIndex = this.allCoords.indexOf(randomCoord);
+    console.log(this.allCoords.length);
+    this.allCoords.splice(randomCoordIndex, 1);
+    console.log(this.allCoords.length);
     return randomCoord;
   }
   // check if player coord is a ship :
@@ -153,3 +153,20 @@ class GameBoard {
   }
 }
 export default GameBoard;
+
+// get all coords :
+// getAllCoords(playerElementContainer) {
+//   this.allCoords = [...playerElementContainer.children].map((square) => [
+//     +square.dataset.x,
+//     +square.dataset.y,
+//   ]);
+//   return this.allCoords;
+// }
+
+// checks if all curr ship items are sunk :
+// isAllCurrShipItemsSunk(currShip) {
+//   const allCurrShipItems = this.getAllCurrShipItems(currShip);
+//   // checks if all curr ship items are sunk :
+//   allCurrShipItems.forEach((ship) => ship.isSunk());
+//   console.log(allCurrShipItems);
+// }

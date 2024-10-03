@@ -128,45 +128,15 @@ class GameBoard {
     const randomCoord = this.allCoords[randomValidIndex];
     // update all coords array so it shouldn’t get the same coord twice:
     const randomCoordIndex = this.allCoords.indexOf(randomCoord);
-    console.log(this.allCoords.length);
     this.allCoords.splice(randomCoordIndex, 1);
-    console.log(this.allCoords.length);
     return randomCoord;
-  }
-  // check if player coord is a ship :
-  checkPlayerCoordIsAShip(playerCoord) {
-    const [x, y] = playerCoord;
-    const currShip = this.board[x][y];
-    return currShip.isShip;
   }
   // checks if all ships are sunk :
   isAllShipsSunk() {
-    for (const i in this.board) {
-      const allShips = [];
-      for (const j in this.board[i]) {
-        if (!this.board[i][j].hasOwnProperty("value"))
-          allShips.push(this.board[i][j]);
-      }
-    }
-    const isShipsSunk = allShips.every((ship) => ship.isShipSunk);
-    return isShipsSunk ? true : false;
+    return this.board
+      .flat()
+      .filter((cell) => cell.isShip)
+      .every((ship) => ship.isShipSunk);
   }
 }
 export default GameBoard;
-
-// get all coords :
-// getAllCoords(playerElementContainer) {
-//   this.allCoords = [...playerElementContainer.children].map((square) => [
-//     +square.dataset.x,
-//     +square.dataset.y,
-//   ]);
-//   return this.allCoords;
-// }
-
-// checks if all curr ship items are sunk :
-// isAllCurrShipItemsSunk(currShip) {
-//   const allCurrShipItems = this.getAllCurrShipItems(currShip);
-//   // checks if all curr ship items are sunk :
-//   allCurrShipItems.forEach((ship) => ship.isSunk());
-//   console.log(allCurrShipItems);
-// }

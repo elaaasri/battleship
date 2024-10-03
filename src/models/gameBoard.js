@@ -98,7 +98,7 @@ class GameBoard {
     );
     return isShipCoordsWithingBoard ? allRightSideCoords : null;
   }
-  // get current ship :
+  // get one ship that represents all current ship items :
   getCurrShip(x, y) {
     const currShip = this.board[x][y];
     return currShip;

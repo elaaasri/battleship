@@ -299,31 +299,33 @@ const startBattle = {
     boardElement.style.cursor = "pointer";
     // board element event :
     [...boardElement.children].forEach((square) => {
+      // fixes event listener duplication.
       const newSquare = square.cloneNode(true);
-      square.replaceWith(newSquare); // Replace the old square with the new one
+      square.replaceWith(newSquare);
       newSquare.addEventListener("click", () => {
         console.log("#".repeat(20));
-        square.style.pointerEvents = "none";
-        const currCoords = this.getCurrCoords(square); // gets curr square coords.
+        newSquare.style.pointerEvents = "none";
+        const currCoords = this.getCurrCoords(newSquare); // gets curr square coords.
         const [x, y] = currCoords;
         const currShip = boardObject.getCurrShip(x, y); // checks if curr square is a ship :
         // stop executing if no ship :
         if (!currShip.isShip) {
+          newSquare.style.background = "white";
           this.togglePlayers(computerPlayer.getName());
           return;
         }
         // triggers battle funcs :
-        square.style.background = "red";
+        newSquare.style.background = "red";
         boardObject.receiveAttack(currShip);
-        console.log("current computer ship ", currShip);
-        console.log("is it a ship", currShip.isShip);
+        console.log("player ship", currShip, currShip.isShip, boardObject);
         if (currShip.isSunk()) {
-          const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+          const currShipImage = this.getComputerSunkShipImage(currShip);
+          console.log(currShipImage);
           this.hideCurrShipHits(
             currShip.getShipLength(),
-            shipHeadSquareImage.parentElement
+            currShipImage.parentElement
           );
-          shipHeadSquareImage.style.display = "flex";
+          currShipImage.style.display = "flex";
         }
       });
     });
@@ -337,42 +339,50 @@ const startBattle = {
     // console.log("random", randomPlayerValidCoord);
     const [x, y] = randomPlayerValidCoord;
     // get the current square element :
-    const currSquare = [...boardElement.children].find(
-      (square) => +square.dataset.x == x && +square.dataset.y == y
-    );
+    const currSquare = this.getCurrSquareElement(boardElement, x, y);
     currSquare.style.pointerEvents = "none";
     // get current ship object :
     const currShip = boardObject.getCurrShip(x, y);
-    currSquare.style.background = currShip.isShip ? "red" : "blue";
+    // currSquare.style.background = currShip.isShip ? "red" : "blue";
     if (!currShip.isShip) {
-      console.log("not a ship");
+      currSquare.style.background = "white";
       this.togglePlayers(humanPlayer.getName());
       return;
     }
-
     // triggers battle funcs :
-    // currSquare.style.background = "red";
-    // boardObject.receiveAttack(currShip);
-    // console.log(currShip);
-    // if (currShip.isSunk()) {
-    //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
-    //   this.hideCurrShipHits(
-    //     currShip.getShipLength(),
-    //     shipHeadSquareImage.parentElement
-    //   );
-    //   shipHeadSquareImage.style.display = "flex";
-    // }
+    currSquare.style.background = "red";
+    boardObject.receiveAttack(currShip);
+    if (currShip.isSunk()) {
+      const currShipImage = this.getHumanSunkShipImage(currShip);
+      this.hideCurrShipHits(
+        currShip.getShipLength(),
+        currShipImage.parentElement
+      );
+      currShipImage.style.display = "flex";
+    }
+    this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
+  },
+  // get the current square element :
+  getCurrSquareElement(boardElement, x, y) {
+    return [...boardElement.children].find(
+      (square) => +square.dataset.x == x && +square.dataset.y == y
+    );
   },
   // get current coords :
   getCurrCoords(currSquare) {
     return [Number(currSquare.dataset.x), Number(currSquare.dataset.y)];
   },
   // get most left shi head square nested image :
-  getShipHeadSquareImage(currShip) {
+  getComputerSunkShipImage(currShip) {
     const allComputerShipImages = [
       ...document.querySelectorAll(".computer-ship-image"),
     ];
     return [...allComputerShipImages].find(
+      (image) => image.id == currShip.shipName
+    );
+  },
+  getHumanSunkShipImage(currShip) {
+    return [...allPlayerShipImages].find(
       (image) => image.id == currShip.shipName
     );
   },
@@ -396,6 +406,44 @@ createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
 allPlayerShipImages.map((ship) => {
   ship.addEventListener("click", renderPlayerShipTypes.render(ship));
 });
+
+// // attack human player :
+// attackHumanPlayer(boardElement, boardObject) {
+//   boardElement.style.pointerEvents = "auto";
+//   boardElement.style.cursor = "pointer";
+//   // get random player valid coord :
+//   const randomPlayerValidCoord = boardObject.getRandomPlayerValidCoord();
+//   // console.log("random", randomPlayerValidCoord);
+//   const [x, y] = randomPlayerValidCoord;
+//   // get the current square element :
+//   const currSquare = this.getCurrSquareElement(boardElement, x, y);
+//   currSquare.style.pointerEvents = "none";
+//   // get current ship object :
+//   const currShip = boardObject.getCurrShip(x, y);
+//   // currSquare.style.background = currShip.isShip ? "red" : "blue";
+//   if (!currShip.isShip) {
+//     console.log("not a ship");
+//     currSquare.style.background = "white";
+//     this.togglePlayers(humanPlayer.getName());
+//     return;
+//   }
+//   // triggers battle funcs :
+//   if (currShip.isShip) {
+//     currSquare.style.background = "red";
+//     boardObject.receiveAttack(currShip);
+//     this.togglePlayers(humanPlayer.getName());
+//   }
+
+//   // console.log(currShip);
+//   // if (currShip.isSunk()) {
+//   //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+//   //   this.hideCurrShipHits(
+//   //     currShip.getShipLength(),
+//   //     shipHeadSquareImage.parentElement
+//   //   );
+//   //   shipHeadSquareImage.style.display = "flex";
+//   // }
+// },
 
 // working on cleaning the code :
 // funcs added :
@@ -502,3 +550,37 @@ allPlayerShipImages.map((ship) => {
 //     return this.allCoords;
 //   },
 // };
+
+// // attack human player :
+// attackHumanPlayer(boardElement, boardObject) {
+//   boardElement.style.pointerEvents = "auto";
+//   boardElement.style.cursor = "pointer";
+//   // get random player valid coord :
+//   const randomPlayerValidCoord = boardObject.getRandomPlayerValidCoord();
+//   // console.log("random", randomPlayerValidCoord);
+//   const [x, y] = randomPlayerValidCoord;
+//   // get the current square element :
+//   const currSquare = this.getCurrSquareElement(boardElement, x, y);
+//   currSquare.style.pointerEvents = "none";
+//   // get current ship object :
+//   const currShip = boardObject.getCurrShip(x, y);
+//   // currSquare.style.background = currShip.isShip ? "red" : "blue";
+//   if (!currShip.isShip) {
+//     console.log("not a ship");
+//     currSquare.style.background = "white";
+//     this.togglePlayers(humanPlayer.getName());
+//     return;
+//   }
+//   // triggers battle funcs :
+//   currSquare.style.background = "red";
+//   boardObject.receiveAttack(currShip);
+//   // console.log(currShip);
+//   // if (currShip.isSunk()) {
+//   //   const shipHeadSquareImage = this.getShipHeadSquareImage(currShip);
+//   //   this.hideCurrShipHits(
+//   //     currShip.getShipLength(),
+//   //     shipHeadSquareImage.parentElement
+//   //   );
+//   //   shipHeadSquareImage.style.display = "flex";
+//   // }
+// },

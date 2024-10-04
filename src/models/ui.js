@@ -11,19 +11,19 @@ const allPlayerShipImages = [
 
 const playButton = document.getElementById("play-button");
 const playersCard = document.getElementById("players-card");
-const playerOneInput = document.getElementById("player-one-input");
-const playerTwoInput = document.getElementById("player-two-input");
+const playerOneValue = document.getElementById("player-one-input").value;
+const playerTwoValue = document.getElementById("player-two-input").value;
 const playerBattleContainer = document.getElementById(
   "player-battle-container"
 );
 const begginButton = document.getElementById("beggin-button");
 const placePlayerShipsCard = document.getElementById("place-player-ships-card");
 const battleCard = document.getElementById("battle-card");
-const playerName = document.getElementById("player-name");
-const computerName = document.getElementById("computer-name");
+const battlePlayerNameDiv = document.getElementById("battle-player-name");
+const battleComputerNameDiv = document.getElementById("battle-computer-name");
 
 // assign new players :
-const humanPlayer = new Player("humanPlayer"); // player obj.
+const humanPlayer = new Player("anas"); // player obj.
 const humanGameBoardObject = humanPlayer.getPlayerBoard(); // player game board.
 const humanGameBoardObjectName = humanGameBoardObject.getBoardName();
 
@@ -31,7 +31,7 @@ const humanGameBoardObjectName = humanGameBoardObject.getBoardName();
 // console.log(humanGameBoardObject);
 // console.log(humanGameBoardObjectName);
 //
-const computerPlayer = new Player("computerPlayer"); // computer obj.
+const computerPlayer = new Player("computer"); // computer obj.
 const computerGameBoardObject = computerPlayer.getPlayerBoard(); // computer game board.
 const computerGameBoardObjectName = computerGameBoardObject.getBoardName();
 
@@ -233,8 +233,8 @@ const showBattleCard = () => {
   // set styles :
   placePlayerShipsCard.style.display = "none";
   battleCard.style.display = "flex";
-  playerName.textContent = `${playerOneInput.value.toUpperCase()} WATERS`;
-  computerName.textContent = `${playerTwoInput.value.toUpperCase()} WATERS`;
+  battlePlayerNameDiv.textContent = `${playerOneValue.toUpperCase()} WATERS`;
+  battleComputerNameDiv.textContent = `${playerTwoValue.toUpperCase()} WATERS`;
   playerBattleContainer.appendChild(playerBoardElement); // insert player board.
 };
 
@@ -250,8 +250,8 @@ const getPlayersNamesValidation = (playerOneName, playerTwoName) => {
 // play button event :
 playButton.addEventListener("click", () => {
   const isPlayersNamesValid = getPlayersNamesValidation(
-    playerOneInput.value,
-    playerTwoInput.value
+    playerOneValue,
+    playerTwoValue
   );
   if (!isPlayersNamesValid) return;
   // show player placing card :
@@ -283,9 +283,8 @@ begginButton.addEventListener("click", () => {
 const startBattle = {
   // toggles players rounds :
   togglePlayers(currentPlayer) {
-    // playerBoardElement.style.pointerEvents = "none";
-    // computerBoardElement.style.pointerEvents = "none";
-    this.disablePlayersBoardContainers(); // fix problem.
+    // disable container pointerEvents.
+    this.disablePlayersBoardContainers();
     // toggle players round :
     if (currentPlayer == humanPlayer.getName()) {
       this.attackComputerPlayer(computerBoardElement, computerGameBoardObject);
@@ -327,11 +326,7 @@ const startBattle = {
           );
           currShipImage.style.display = "flex";
         }
-        const isAllShipsSunk = boardObject.isAllShipsSunk();
-        if (isAllShipsSunk) {
-          this.disablePlayersBoardContainers();
-          alert("human player wons");
-        }
+        declareWinner(boardObject);
       });
     });
   },
@@ -366,12 +361,7 @@ const startBattle = {
       currShipImage.style.display = "flex";
     }
     this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
-    // checks if all ships are sunk :
-    const isAllShipsSunk = boardObject.isAllShipsSunk();
-    if (isAllShipsSunk) {
-      this.disablePlayersBoardContainers();
-      alert("computer wons");
-    }
+    declareWinner(boardObject);
   },
   // get the current square element :
   getCurrSquareElement(boardElement, x, y) {
@@ -410,7 +400,7 @@ const startBattle = {
       square.style.background = "none";
     });
   },
-  // func to stop the game :
+  // disable containers point events after the game is finished :
   disablePlayersBoardContainers() {
     playerBoardElement.style.pointerEvents = "none";
     computerBoardElement.style.pointerEvents = "none";
@@ -423,17 +413,31 @@ allPlayerShipImages.map((ship) => {
   ship.addEventListener("click", renderPlayerShipTypes.render(ship));
 });
 
-// const declareWinner = (playerName) => {
-//   console.log("the winner is :", playerName);
-// };
+const declareWinner = (gameBoardObject) => {
+  // get correct winner name :
+  let winnerName =
+    playerOneValue == gameBoardObject.getBoardName()
+      ? playerTwoValue
+      : playerOneValue;
+  // check if current game board ships are sunk :
+  const isAllShipsSunk = gameBoardObject.isAllShipsSunk();
+  if (isAllShipsSunk) {
+    startBattle.disablePlayersBoardContainers(); // disable containers pointerEvents.
+    alert(`WINNER IS ${winnerName}`);
+  }
+};
 
-// fix allCoords array in getRandomComputerShipValidCoord.
-// clean the condiotions in handlePlayerSquareEvent in renderPlayerShipTypes.
-
+//
+// fix problems :
+// add a function that check for both players if they win or not!
 // after declaring the winner.
 // => display a window that shows the winner and a play again button
+
+// fix allCoords array in getRandomComputerShipValidCoord.
+// clean the conditions in handlePlayerSquareEvent in renderPlayerShipTypes.
 
 // styles :
 // => fix players board squares when ships are placed !
 // => fix styles for the hits and missed hits and when the ship is sunk
 // => fix overall styles for the game!
+// fix players names inputs and assign new player function!

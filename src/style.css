@@ -259,8 +259,8 @@ input {
 #vs {
   font-size: 40px;
 }
-#player-name,
-#computer-name {
+#battle-player-name,
+#battle-computer-name {
   font-size: 25px;
 }
 #player-battle-container,

@@ -21,19 +21,17 @@ const placePlayerShipsCard = document.getElementById("place-player-ships-card");
 const battleCard = document.getElementById("battle-card");
 const battlePlayerNameDiv = document.getElementById("battle-player-name");
 const battleComputerNameDiv = document.getElementById("battle-computer-name");
+// DOM elements for PvP mode :
+const overlayWindow = document.getElementById("overlay-window");
+const winnerPopupContainer = document.getElementById("winner-popup-container");
+const playAgainButton = document.getElementById("play-again-button");
+const showWinnerDiv = document.getElementById("show-winner-div");
 
 // assign new players :
 const humanPlayer = new Player("anas"); // player obj.
 const humanGameBoardObject = humanPlayer.getPlayerBoard(); // player game board.
-const humanGameBoardObjectName = humanGameBoardObject.getBoardName();
-
-// console.log(humanPlayer);
-// console.log(humanGameBoardObject);
-// console.log(humanGameBoardObjectName);
-//
 const computerPlayer = new Player("computer"); // computer obj.
 const computerGameBoardObject = computerPlayer.getPlayerBoard(); // computer game board.
-const computerGameBoardObjectName = computerGameBoardObject.getBoardName();
 
 // create player game board elements :
 const createGameBoardElements = (arr, container) => {
@@ -423,14 +421,23 @@ const declareWinner = (gameBoardObject) => {
   const isAllShipsSunk = gameBoardObject.isAllShipsSunk();
   if (isAllShipsSunk) {
     startBattle.disablePlayersBoardContainers(); // disable containers pointerEvents.
-    alert(`WINNER IS ${winnerName}`);
+    showOverlayAndWinnerContainer(); // shows winner card.
+    showWinnerDiv.textContent = `${winnerName} Is The Winner!`;
   }
 };
 
-//
+// activate overlay and sjow winner pop up container :
+const showOverlayAndWinnerContainer = () => {
+  overlayWindow.style.display = "flex";
+  winnerPopupContainer.style.display = "flex";
+};
+
+// play again button event :
+playAgainButton.addEventListener("click", () => window.location.reload());
+
 // fix problems :
 // add a function that check for both players if they win or not!
-// after declaring the winner.
+// after declaring the winner. ===> done!
 // => display a window that shows the winner and a play again button
 
 // fix allCoords array in getRandomComputerShipValidCoord.

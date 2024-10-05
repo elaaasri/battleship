@@ -55,7 +55,7 @@ class GameBoard {
     return isShipCoordsWithingBoard ? allRightSideCoords : null;
   }
   // checks if ship coords are valid :
-  isShipCoordsValid(validCoords, allPreviousShipCoordsArr) {
+  isPreviousCoordsUsed(validCoords, allPreviousShipCoordsArr) {
     const areCoordsEqual = allPreviousShipCoordsArr.some((prevCoord) =>
       prevCoord.some((coord) =>
         validCoords.some(
@@ -83,7 +83,6 @@ class GameBoard {
         return cell.coords;
       });
     });
-    // console.log(allCoords); // fix problem!.
     // get random coords :
     const randomValidIndex = Math.floor(Math.random() * allCoords.length);
     const randomCoord = allCoords[randomValidIndex][randomValidIndex];
@@ -117,13 +116,10 @@ class GameBoard {
       ship.hit();
       ship.isSunk();
     });
-    // console.log("all ship items", allCurrShipItems);
-    // console.log(currShip.getBoardName, this.board);
   }
   // get random player game board valid coords :
   getRandomPlayerValidCoord() {
-    // if (this.allCoords.length == 0) return;
-    // if (!this.allCoords) return;
+    // get random coord :
     const randomValidIndex = Math.floor(Math.random() * this.allCoords.length);
     const randomCoord = this.allCoords[randomValidIndex];
     // update all coords array so it shouldn’t get the same coord twice:

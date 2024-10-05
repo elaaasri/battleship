@@ -21,6 +21,7 @@ const placePlayerShipsCard = document.getElementById("place-player-ships-card");
 const battleCard = document.getElementById("battle-card");
 const battlePlayerNameDiv = document.getElementById("battle-player-name");
 const battleComputerNameDiv = document.getElementById("battle-computer-name");
+
 // DOM elements for PvP mode :
 const overlayWindow = document.getElementById("overlay-window");
 const winnerPopupContainer = document.getElementById("winner-popup-container");
@@ -95,17 +96,21 @@ const renderPlayerShipTypes = {
     // player square click event :
     playerSquares.map((square) =>
       square.addEventListener("click", () => {
+        // fixes event listener duplication.
         if (!shipGotPlaced) {
+          // checks all player validtation before placing the ships on board :
+          // checks if cur coords are valid :
           const currValidCoords = humanGameBoardObject.getPlayerCurrValidCoords(
             square,
             shipLength
           );
           if (!currValidCoords) return;
-          const isShiptValid = humanGameBoardObject.isShipCoordsValid(
+          // checks if cur coords are not already used! :
+          const isCoordinateUsed = humanGameBoardObject.isPreviousCoordsUsed(
             currValidCoords,
             this.allPreviousShipCoords
           );
-          if (!isShiptValid) return;
+          if (!isCoordinateUsed) return;
           // if all validations passed :
           document.removeEventListener("mousemove", handleMouse);
           this.allPreviousShipCoords.push(currValidCoords);
@@ -300,7 +305,6 @@ const startBattle = {
       const newSquare = square.cloneNode(true);
       square.replaceWith(newSquare);
       newSquare.addEventListener("click", () => {
-        console.log("#".repeat(20));
         newSquare.style.pointerEvents = "none";
         const currCoords = this.getCurrCoords(newSquare); // gets curr square coords.
         const [x, y] = currCoords;
@@ -314,10 +318,8 @@ const startBattle = {
         // triggers battle funcs :
         newSquare.style.background = "red";
         boardObject.receiveAttack(currShip);
-        console.log("player ship", currShip, currShip.isShip, boardObject);
         if (currShip.isSunk()) {
           const currShipImage = this.getComputerSunkShipImage(currShip);
-          console.log(currShipImage);
           this.hideCurrShipHits(
             currShip.getShipLength(),
             currShipImage.parentElement
@@ -334,7 +336,6 @@ const startBattle = {
     boardElement.style.cursor = "pointer";
     // get random player valid coord :
     const randomPlayerValidCoord = boardObject.getRandomPlayerValidCoord();
-    // console.log("random", randomPlayerValidCoord);
     const [x, y] = randomPlayerValidCoord;
     // get the current square element :
     const currSquare = this.getCurrSquareElement(boardElement, x, y);
@@ -413,7 +414,7 @@ allPlayerShipImages.map((ship) => {
 
 const declareWinner = (gameBoardObject) => {
   // get correct winner name :
-  let winnerName =
+  const winnerName =
     playerOneValue == gameBoardObject.getBoardName()
       ? playerTwoValue
       : playerOneValue;
@@ -426,7 +427,7 @@ const declareWinner = (gameBoardObject) => {
   }
 };
 
-// activate overlay and sjow winner pop up container :
+// activate overlay and show winner pop up container :
 const showOverlayAndWinnerContainer = () => {
   overlayWindow.style.display = "flex";
   winnerPopupContainer.style.display = "flex";
@@ -438,10 +439,10 @@ playAgainButton.addEventListener("click", () => window.location.reload());
 // fix problems :
 // add a function that check for both players if they win or not!
 // after declaring the winner. ===> done!
-// => display a window that shows the winner and a play again button
+// => display a window that shows the winner and a play again button ==> done!
 
-// fix allCoords array in getRandomComputerShipValidCoord.
-// clean the conditions in handlePlayerSquareEvent in renderPlayerShipTypes.
+// fix allCoords array in getRandomComputerShipValidCoord. ==> done!
+// clean the conditions in handlePlayerSquareEvent in renderPlayerShipTypes. ==> done!
 
 // styles :
 // => fix players board squares when ships are placed !

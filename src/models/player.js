@@ -21,7 +21,6 @@ class Player {
       const [x, y] = coord;
       this.gameBoard.placeShip(x, y, shipName, shipLength);
     });
-    // console.log(this.gameBoard.board);
   }
   // creates ship type obj :
   createShipType(shipName) {
@@ -33,7 +32,7 @@ class Player {
       "destroyer-ship": 2,
     };
     const shipLength = allShipTypes[shipName];
-    
+
     return new Ship(shipName, shipLength);
   }
 }

@@ -175,7 +175,6 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* width: 280px; */
   height: 100%;
   width: 50%;
   box-shadow: 0px 15px 40px black;
@@ -215,11 +214,6 @@ input {
   transform: scale(1.1);
   cursor: pointer;
 }
-/* fix hiding computer images */
-/* .computer-ship-image {
-  z-index: 10;
-} */
-
 #carrier-ship {
   background-image: url("./images/ships/carrier.svg");
 }
@@ -241,12 +235,15 @@ input {
 .hover-zoom.hovered {
   transform: scale(1.2);
 }
+
+/* all squares styles : */
 .square {
   position: relative;
-  border: 1px solid;
+  border: 1px solid black;
+  border-radius: 3px;
 }
-/* player vs computer card styles */
 
+/* player vs computer battle card styles */
 #battle-card {
   display: flex;
   justify-content: center;

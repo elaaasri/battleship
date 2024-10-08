@@ -32,7 +32,6 @@ class Player {
       "destroyer-ship": 2,
     };
     const shipLength = allShipTypes[shipName];
-
     return new Ship(shipName, shipLength);
   }
 }

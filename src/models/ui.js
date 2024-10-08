@@ -8,11 +8,10 @@ const computerBoardElement = document.getElementById("computer-game-board");
 const allPlayerShipImages = [
   ...document.querySelectorAll(".player-ship-image"),
 ];
-
 const playButton = document.getElementById("play-button");
 const playersCard = document.getElementById("players-card");
-const playerOneValue = document.getElementById("player-one-input").value;
-const playerTwoValue = document.getElementById("player-two-input").value;
+const playerOneInput = document.getElementById("player-one-input");
+const playerTwoInput = document.getElementById("player-two-input");
 const playerBattleContainer = document.getElementById(
   "player-battle-container"
 );
@@ -21,14 +20,12 @@ const placePlayerShipsCard = document.getElementById("place-player-ships-card");
 const battleCard = document.getElementById("battle-card");
 const battlePlayerNameDiv = document.getElementById("battle-player-name");
 const battleComputerNameDiv = document.getElementById("battle-computer-name");
-
-// DOM elements for PvP mode :
 const overlayWindow = document.getElementById("overlay-window");
 const winnerPopupContainer = document.getElementById("winner-popup-container");
 const playAgainButton = document.getElementById("play-again-button");
 const showWinnerDiv = document.getElementById("show-winner-div");
 
-// assign new players :
+// assign players and their game boards :
 const humanPlayer = new Player("anas"); // player obj.
 const humanGameBoardObject = humanPlayer.getPlayerBoard(); // player game board.
 const computerPlayer = new Player("computer"); // computer obj.
@@ -134,10 +131,6 @@ const renderPlayerShipTypes = {
     currentSquare.appendChild(ship);
   },
 };
-// player ship types click event :
-// allPlayerShipImages.map((ship) => {
-//   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
-// });
 
 // computer player dom obj :
 const renderComputerShips = {
@@ -233,11 +226,13 @@ const isAllPlayerShipsPlaced = () => {
 
 // display battle card :
 const showBattleCard = () => {
+  const playerOneName = playerOneInput.value;
+  const playerTwoName = playerTwoInput.value;
   // set styles :
   placePlayerShipsCard.style.display = "none";
   battleCard.style.display = "flex";
-  battlePlayerNameDiv.textContent = `${playerOneValue.toUpperCase()} WATERS`;
-  battleComputerNameDiv.textContent = `${playerTwoValue.toUpperCase()} WATERS`;
+  battlePlayerNameDiv.textContent = `${playerOneName.toUpperCase()} WATERS`;
+  battleComputerNameDiv.textContent = `${playerTwoName.toUpperCase()} WATERS`;
   playerBattleContainer.appendChild(playerBoardElement); // insert player board.
 };
 
@@ -252,20 +247,21 @@ const getPlayersNamesValidation = (playerOneName, playerTwoName) => {
 
 // play button event :
 playButton.addEventListener("click", () => {
+  const playerOneName = playerOneInput.value;
+  const playerTwoName = playerTwoInput.value;
   const isPlayersNamesValid = getPlayersNamesValidation(
-    playerOneValue,
-    playerTwoValue
+    playerOneName,
+    playerTwoName
   );
   if (!isPlayersNamesValid) return;
   // show player placing card :
   showPlacingPlayerShipsCard();
   // creates player game board :
-  // createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
+  createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
   // // render player ship types event :
-  // allPlayerShipImages.map((ship) => {
-  //   ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
-  // });
-  // triggers battle funcs :
+  allPlayerShipImages.map((ship) => {
+    ship.addEventListener("click", () => renderPlayerShipTypes.render(ship));
+  });
 });
 
 // beggin button event :
@@ -326,7 +322,7 @@ const startBattle = {
             currShipImage
           );
         }
-        declareWinner(gameBoardObject);
+        this.declareWinner(gameBoardObject);
       });
     });
   },
@@ -373,7 +369,7 @@ const startBattle = {
       this.manipulateCurrSunkShipStyle(currShip.getShipLength(), currShipImage);
     }
     this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
-    declareWinner(gameBoardObject);
+    this.declareWinner(gameBoardObject);
   },
   // get the current square element :
   getCurrSquareElement(boardElement, x, y) {
@@ -394,6 +390,7 @@ const startBattle = {
       (image) => image.id == currShip.shipName
     );
   },
+  // get human sunk ship image :
   getHumanSunkShipImage(currShip) {
     return [...allPlayerShipImages].find(
       (image) => image.id == currShip.shipName
@@ -404,50 +401,26 @@ const startBattle = {
     playerBoardElement.style.pointerEvents = "none";
     computerBoardElement.style.pointerEvents = "none";
   },
-};
-
-createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
-// render player ship types event :
-allPlayerShipImages.map((ship) => {
-  ship.addEventListener("click", renderPlayerShipTypes.render(ship));
-});
-
-const declareWinner = (gameBoardObject) => {
-  // get correct winner name :
-  const winnerName =
-    playerOneValue == gameBoardObject.getBoardName()
-      ? playerTwoValue
-      : playerOneValue;
-  // check if current game board ships are sunk :
-  if (!gameBoardObject.isAllShipsSunk()) return;
-  startBattle.disablePlayersBoardContainers(); // disable containers pointerEvents.
-  showOverlayAndWinnerContainer(); // shows winner card.
-  showWinnerDiv.textContent = `${winnerName} Is The Winner!`;
-};
-
-// activate overlay and show winner pop up container :
-const showOverlayAndWinnerContainer = () => {
-  overlayWindow.style.display = "flex";
-  winnerPopupContainer.style.display = "flex";
+  declareWinner(gameBoardObject) {
+    // get correct winner name :
+    const playerOneName = playerOneInput.value;
+    const playerTwoName = playerTwoInput.value;
+    const winnerName =
+      playerOneName == gameBoardObject.getBoardName()
+        ? playerTwoName
+        : playerOneName;
+    // check if current game board ships are sunk :
+    if (!gameBoardObject.isAllShipsSunk()) return;
+    startBattle.disablePlayersBoardContainers(); // disable containers pointerEvents.
+    this.showOverlayAndWinnerContainer(); // shows winner card.
+    showWinnerDiv.textContent = `${winnerName} Is The Winner!`;
+  },
+  // activate overlay and show winner pop up container :
+  showOverlayAndWinnerContainer() {
+    overlayWindow.style.display = "flex";
+    winnerPopupContainer.style.display = "flex";
+  },
 };
 
 // play again button event :
 playAgainButton.addEventListener("click", () => window.location.reload());
-
-// fix problems :
-// add a function that check for both players if they win or not! ==> done!
-// after declaring the winner. ===> done!
-// => display a window that shows the winner and a play again button ==> done!
-// fix allCoords array in getRandomComputerShipValidCoord. ==> done!
-// clean the conditions in handlePlayerSquareEvent in renderPlayerShipTypes. ==> done!
-
-// working on setting ships styles :
-// missed square ==> done
-// hitted square ==> done
-
-// styles :
-// => fix players board squares when ships are placed! ==>
-// => fix hover mouse ==>
-// => fix styles for the hits and missed hits and when the ship is sunk! ==> done!
-// => fix overall styles for the game! ==>
-// => fix players names inputs and assign new player function! ==>

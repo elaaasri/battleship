@@ -322,6 +322,13 @@ const startBattle = {
             currShipImage
           );
         }
+        // check if all current game board ships are sunk :
+        const isAllShipsSunk = gameBoardObject.isAllCurrGameBoardShipsSunk();
+        if (!isAllShipsSunk) {
+          this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
+          return;
+        }
+        // declares the winner :
         this.declareWinner(gameBoardObject);
       });
     });
@@ -368,7 +375,13 @@ const startBattle = {
       const currShipImage = this.getHumanSunkShipImage(currShip, currSquare);
       this.manipulateCurrSunkShipStyle(currShip.getShipLength(), currShipImage);
     }
-    this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
+    // check if all current game board ships are sunk :
+    const isAllShipsSunk = gameBoardObject.isAllCurrGameBoardShipsSunk();
+    if (!isAllShipsSunk) {
+      this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
+      return;
+    }
+    // delacres the winner :
     this.declareWinner(gameBoardObject);
   },
   // get the current square element :
@@ -402,16 +415,15 @@ const startBattle = {
     computerBoardElement.style.pointerEvents = "none";
   },
   declareWinner(gameBoardObject) {
-    // get correct winner name :
     const playerOneName = playerOneInput.value;
     const playerTwoName = playerTwoInput.value;
+    const currentPlayerName = gameBoardObject.getBoardName();
+    // get correct winner name :
     const winnerName =
-      playerOneName == gameBoardObject.getBoardName()
-        ? playerTwoName
-        : playerOneName;
-    // check if current game board ships are sunk :
-    if (!gameBoardObject.isAllShipsSunk()) return;
-    startBattle.disablePlayersBoardContainers(); // disable containers pointerEvents.
+      currentPlayerName == playerOneName ? playerTwoName : playerOneName;
+    // disable interactions with both game boards :
+    startBattle.disablePlayersBoardContainers();
+    // shows winner card :
     this.showOverlayAndWinnerContainer(); // shows winner card.
     showWinnerDiv.textContent = `${winnerName} Is The Winner!`;
   },

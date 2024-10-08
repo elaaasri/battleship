@@ -128,7 +128,7 @@ class GameBoard {
     return randomCoord;
   }
   // checks if all ships are sunk :
-  isAllShipsSunk() {
+  isAllCurrGameBoardShipsSunk() {
     return this.board
       .flat()
       .filter((cell) => cell.isShip)

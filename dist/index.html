@@ -1,1 +1,106 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Battle-Ship</title><link href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Delicious+Handrawn&family=Press+Start+2P&family=Sedgwick+Ave+Display&display=swap" rel="stylesheet"/><link rel="icon" href="images/ships/battle-ship-icon.png" type="image/png"/><script src="https://kit.fontawesome.com/96f630ca48.js" crossorigin="anonymous"></script><script defer="defer" src="bundle.js"></script></head><body><header><h1>Battle Ship</h1></header><main><div id="players-card" style="display: flex"><div id="players-container"><div id="player-one-container"><label for="player-one-input">Human Player</label> <input id="player-one-input" placeholder="Enter Name :" required/> <i class="fa-solid fa-skull-crossbones"></i></div><span id="vs">VS</span><div id="player-two-container"><label for="player-two-input">Computer Player</label> <input id="player-two-input" placeholder="Enter Name :" value="Computer" required/> <i class="fa-solid fa-robot"></i></div></div><button id="play-button">Play</button></div><div id="place-player-ships-card" style="display: none"><h1 id="place-ships-header">Place Your Ships</h1><div id="place-ships-container"><div id="player-board-container"><p id="player-board-header">Player Game Board :</p><div id="player-game-board"></div></div><div id="player-ship-type-container"><div class="player-ship-type"><p>Carrier Ship :</p><img class="player-ship-image" id="carrier-ship" id="myImage" class="hover-zoom"/></div><div class="player-ship-type"><p>Battle Ship :</p><img class="player-ship-image" id="battle-ship"/></div><div class="player-ship-type"><p>Cruiser Ship :</p><img class="player-ship-image" id="cruiser-ship"/></div><div class="player-ship-type"><p>Submarine Ship :</p><img class="player-ship-image" id="submarine-ship"/></div><div class="player-ship-type"><p>Destroyer Ship :</p><img class="player-ship-image" id="destroyer-ship"/></div></div></div><button id="beggin-button">Beggin!</button></div><div id="battle-card" style="display: none"><div id="player-battle-container"><div id="battle-player-name">Player Waters</div></div><div id="vs">VS</div><div id="computer-battle-container"><div id="battle-computer-name">Computer Waters</div><div id="computer-game-board"></div></div></div><div id="overlay-window" style="display: none"></div><div id="winner-popup-container" style="display: none"><div id="show-winner-div">winner</div><button id="play-again-button">Play Again</button></div></main><footer class="footer">Copyright © &nbsp;<p>elaaasri</p>&nbsp; &nbsp; <a href="https://github.com/elaaasri"><i class="fab fa-github"></i></a></footer></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Battle-Ship</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Delicious+Handrawn&family=Press+Start+2P&family=Sedgwick+Ave+Display&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="../src/images/ships/battle-ship-icon.png"
+      type="image/png"
+    />
+    <script
+      src="https://kit.fontawesome.com/96f630ca48.js"
+      crossorigin="anonymous"
+    ></script>
+    <script defer="defer" src="bundle.js"></script>
+  </head>
+  <body>
+    <header><h1>Battle Ship</h1></header>
+    <main>
+      <div id="players-card" style="display: flex">
+        <div id="players-container">
+          <div id="player-one-container">
+            <label for="player-one-input">Human Player</label>
+            <input id="player-one-input" placeholder="Enter Name :" required />
+            <i class="fa-solid fa-skull-crossbones"></i>
+          </div>
+          <span id="vs">VS</span>
+          <div id="player-two-container">
+            <label for="player-two-input">Computer Player</label>
+            <input
+              id="player-two-input"
+              placeholder="Enter Name :"
+              value="Computer"
+              required
+            />
+            <i class="fa-solid fa-robot"></i>
+          </div>
+        </div>
+        <button id="play-button">Play</button>
+      </div>
+      <div id="place-player-ships-card" style="display: none">
+        <h1 id="place-ships-header">Place Your Ships</h1>
+        <div id="place-ships-container">
+          <div id="player-board-container">
+            <p id="player-board-header">Player Game Board :</p>
+            <div id="player-game-board"></div>
+          </div>
+          <div id="player-ship-type-container">
+            <div class="player-ship-type">
+              <p>Carrier Ship :</p>
+              <img
+                class="player-ship-image"
+                id="carrier-ship"
+                id="myImage"
+                class="hover-zoom"
+              />
+            </div>
+            <div class="player-ship-type">
+              <p>Battle Ship :</p>
+              <img class="player-ship-image" id="battle-ship" />
+            </div>
+            <div class="player-ship-type">
+              <p>Cruiser Ship :</p>
+              <img class="player-ship-image" id="cruiser-ship" />
+            </div>
+            <div class="player-ship-type">
+              <p>Submarine Ship :</p>
+              <img class="player-ship-image" id="submarine-ship" />
+            </div>
+            <div class="player-ship-type">
+              <p>Destroyer Ship :</p>
+              <img class="player-ship-image" id="destroyer-ship" />
+            </div>
+          </div>
+        </div>
+        <button id="beggin-button">Beggin!</button>
+      </div>
+      <div id="battle-card" style="display: none">
+        <div id="player-battle-container">
+          <div id="battle-player-name">Player Waters</div>
+        </div>
+        <div id="vs">VS</div>
+        <div id="computer-battle-container">
+          <div id="battle-computer-name">Computer Waters</div>
+          <div id="computer-game-board"></div>
+        </div>
+      </div>
+      <div id="overlay-window" style="display: none"></div>
+      <div id="winner-popup-container" style="display: none">
+        <div id="show-winner-div">winner</div>
+        <button id="play-again-button">Play Again</button>
+      </div>
+    </main>
+    <footer class="footer">
+      Copyright © &nbsp;
+      <p>elaaasri</p>
+      &nbsp; &nbsp;
+      <a href="https://github.com/elaaasri"><i class="fab fa-github"></i></a>
+    </footer>
+  </body>
+</html>

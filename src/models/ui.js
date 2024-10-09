@@ -25,11 +25,25 @@ const winnerPopupContainer = document.getElementById("winner-popup-container");
 const playAgainButton = document.getElementById("play-again-button");
 const showWinnerDiv = document.getElementById("show-winner-div");
 
-// assign players and their game boards :
-const humanPlayer = new Player("anas"); // player obj.
-const humanGameBoardObject = humanPlayer.getPlayerBoard(); // player game board.
-const computerPlayer = new Player("computer"); // computer obj.
-const computerGameBoardObject = computerPlayer.getPlayerBoard(); // computer game board.
+// obj that contains players objects :
+const playerState = {
+  humanPlayer: null,
+  humanGameBoardObject: null,
+  computerPlayer: null,
+  computerGameBoardObject: null,
+};
+
+// assign players and their game boards object :
+const initializePlayers = (playerOneName, playerTwoName) => {
+  // assign players instances :
+  const humanPlayerInstance = new Player(playerOneName);
+  const computerPlayerInstance = new Player(playerTwoName);
+  // modify player state obj so it can be used global :
+  playerState.humanPlayer = humanPlayerInstance;
+  playerState.computerPlayer = computerPlayerInstance;
+  playerState.humanGameBoardObject = humanPlayerInstance.getPlayerBoard();
+  playerState.computerGameBoardObject = computerPlayerInstance.getPlayerBoard();
+};
 
 // create player game board elements :
 const createGameBoardElements = (arr, container) => {
@@ -52,6 +66,7 @@ const renderPlayerShipTypes = {
   // display ship type elements :
   render(shipImage) {
     shipImage.style.pointerEvents = "none";
+    const { humanPlayer } = playerState;
     const currShipObj = humanPlayer.createShipType(shipImage.id);
     const currShipName = currShipObj.getShipName();
     const currShipLength = currShipObj.getShipLength();
@@ -89,6 +104,7 @@ const renderPlayerShipTypes = {
   // handle player square click event :
   handlePlayerSquareEvent(shipImage, handleMouse, shipName, shipLength) {
     const playerSquares = [...playerBoardElement.children]; // player squares.
+    const { humanPlayer, humanGameBoardObject } = playerState;
     let shipGotPlaced = false;
     // player square click event :
     playerSquares.map((square) =>
@@ -157,6 +173,7 @@ const renderComputerShips = {
     return allShipTypesArr;
   },
   placeComputerShips(computerShipTypes) {
+    const { computerPlayer } = playerState;
     computerShipTypes.map(([shipName, shipLength, shipImage]) => {
       let computerValidCoords = this.getValidCoords(shipLength);
       // place ship on board :
@@ -175,6 +192,7 @@ const renderComputerShips = {
     });
   },
   getValidCoords(shipLength) {
+    const { computerGameBoardObject } = playerState;
     let coords = null;
     while (!coords) {
       coords =
@@ -249,14 +267,15 @@ const getPlayersNamesValidation = (playerOneName, playerTwoName) => {
 playButton.addEventListener("click", () => {
   const playerOneName = playerOneInput.value;
   const playerTwoName = playerTwoInput.value;
-  const isPlayersNamesValid = getPlayersNamesValidation(
-    playerOneName,
-    playerTwoName
-  );
-  if (!isPlayersNamesValid) return;
+  // checks playes name validation :
+  if (!getPlayersNamesValidation(playerOneName, playerTwoName)) return;
+  // initialze players object :
+  initializePlayers(playerOneName, playerTwoName);
+  console.log(playerState);
   // show player placing card :
   showPlacingPlayerShipsCard();
   // creates player game board :
+  const { humanGameBoardObject } = playerState;
   createGameBoardElements(humanGameBoardObject.board, playerBoardElement);
   // // render player ship types event :
   allPlayerShipImages.map((ship) => {
@@ -272,6 +291,7 @@ begginButton.addEventListener("click", () => {
   // show battle card :
   showBattleCard();
   // creates computer game board :
+  const { computerGameBoardObject, humanPlayer } = playerState;
   createGameBoardElements(computerGameBoardObject.board, computerBoardElement);
   // render computer ships :
   renderComputerShips.render();
@@ -282,6 +302,12 @@ begginButton.addEventListener("click", () => {
 const startBattle = {
   // toggles players rounds :
   togglePlayers(currentPlayer) {
+    const {
+      humanPlayer,
+      humanGameBoardObject,
+      computerPlayer,
+      computerGameBoardObject,
+    } = playerState;
     // disable container pointerEvents.
     this.disablePlayersBoardContainers();
     // toggle players round :
@@ -293,6 +319,7 @@ const startBattle = {
   },
   // attack computer player :
   attackComputerPlayer(gameBoardElement, gameBoardObject) {
+    const { computerPlayer } = playerState;
     gameBoardElement.style.pointerEvents = "auto";
     gameBoardElement.style.cursor = "pointer";
     // board element event :
@@ -351,6 +378,7 @@ const startBattle = {
   },
   // attack human player :
   attackHumanPlayer(gameBoardElement, gameBoardObject) {
+    const { humanPlayer, computerPlayer } = playerState;
     gameBoardElement.style.pointerEvents = "auto";
     gameBoardElement.style.cursor = "pointer";
     // get random player valid coord :

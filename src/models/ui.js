@@ -271,7 +271,6 @@ playButton.addEventListener("click", () => {
   if (!getPlayersNamesValidation(playerOneName, playerTwoName)) return;
   // initialze players object :
   initializePlayers(playerOneName, playerTwoName);
-  console.log(playerState);
   // show player placing card :
   showPlacingPlayerShipsCard();
   // creates player game board :

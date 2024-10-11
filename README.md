@@ -12,5 +12,5 @@
 ![alt text](https://github.com/elaaasri/battleship/blob/main/dist/start-screen.png)
   - Place Your Ships :
 ![alt text](https://github.com/elaaasri/battleship/blob/main/dist/place-ship-screen.png)
-  - Decalre The Winner :
+  - Declare The Winner :
 ![alt text](https://github.com/elaaasri/battleship/blob/main/dist/winner-screen.png)

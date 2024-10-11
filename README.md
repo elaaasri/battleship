@@ -6,6 +6,11 @@
   - Alternate turns between the player and the computer.
   - Decalres a winner when opponent ships are sunk.
 
-[Live App.](https://elaaasri.github.io/battleship/)
+[Live App. 👈](https://elaaasri.github.io/battleship/)
 
-
+  - Game Start : 
+![alt text](https://github.com/elaaasri/battleship/blob/main/dist/start-screen.png)
+  - Place Your Ships :
+![alt text](https://github.com/elaaasri/battleship/blob/main/dist/place-ship-screen.png)
+  - Decalre The Winner :
+![alt text](https://github.com/elaaasri/battleship/blob/main/dist/winner-screen.png)

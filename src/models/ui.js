@@ -1,6 +1,4 @@
 import Player from "./player";
-// import Ship from "./ship";
-// import GameBoard from "./gameBoard";
 
 // dom elements :
 const playerBoardElement = document.getElementById("player-game-board");
@@ -25,7 +23,7 @@ const winnerPopupContainer = document.getElementById("winner-popup-container");
 const playAgainButton = document.getElementById("play-again-button");
 const showWinnerDiv = document.getElementById("show-winner-div");
 
-// obj that contains players objects :
+// players state object :
 const playerState = {
   humanPlayer: null,
   humanGameBoardObject: null,
@@ -350,10 +348,8 @@ const startBattle = {
         }
         // check if all current game board ships are sunk :
         const isAllShipsSunk = gameBoardObject.isAllCurrGameBoardShipsSunk();
-        if (!isAllShipsSunk) {
-          this.togglePlayers(computerPlayer.getName()); // attack player again if its a ship.
-          return;
-        }
+        // keep attacking if all current game board ships are not sunk :
+        if (!isAllShipsSunk) return;
         // declares the winner :
         this.declareWinner(gameBoardObject);
       });
